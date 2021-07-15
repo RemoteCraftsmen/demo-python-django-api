@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: postgres.djangoToDo.docker
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+    - ~/data/postgres.djangoToDo.docker:/var/lib/postgresql/data
+    ports:
+    - 127.0.0.1:${DATABASE_PORT}:5432            
+
+  db_test:
+    image: postgres
+    container_name: postgres_test.djangoToDo.docker
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${TEST_DATABASE_NAME}
+    volumes:
+    - ~/data/postgres_test.djangoToDo.docker:/var/lib/postgresql/data
+    ports:
+    - 127.0.0.1:${TEST_DATABASE_PORT}:5432
