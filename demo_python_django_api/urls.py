@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
+from ToDo.plugins.error_handlers.noFoundErrorHandle import no_found_error_handle
+
+import ToDo.routes
+
 
 urlpatterns = [
+    path('api/', include(ToDo.routes.urlpatterns)),
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+
 ]
+
+handler404 = no_found_error_handle
