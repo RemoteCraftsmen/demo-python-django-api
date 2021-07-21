@@ -1,18 +1,16 @@
-from rest_framework import status, views
+from rest_framework import status, generics
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from ToDo.serializers.auth.Register import RegisterSerializer
-from ToDo.serializers.auth.Profile import ProfileSerializer
+from ToDo.serializers.auth import RegisterSerializer, ProfileSerializer
 from django.contrib.auth import login
-from ToDo.plugins.authentication.CsrfExemptSessionAuthentication import CsrfExemptSessionAuthentication
+from operator import itemgetter
+from django.contrib.auth.models import User
 
 
-class Register(views.APIView):
+class Register(generics.CreateAPIView):
     """
     Register new user
     * Requires email, password, username, passwordConfirm  in body section
     """
-    authentication_classes = (CsrfExemptSessionAuthentication,)
 
     def post(self, request, **kwargs):
         serializer = RegisterSerializer(data=request.data)
@@ -20,9 +18,7 @@ class Register(views.APIView):
         if not serializer.is_valid():
             return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        username = serializer.data['username']
-        email = serializer.data['email']
-        password = serializer.data['password']
+        username, email, password = itemgetter('username', 'email', 'password')(serializer.validated_data)
 
         user = User.objects.create_user(username, email, password)
         login(request, user)
