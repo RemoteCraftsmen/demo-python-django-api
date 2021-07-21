@@ -1,20 +1,35 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+from django.contrib.auth.models import User
+from django.core import exceptions
+import django.contrib.auth.password_validation as validators
+
 
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
-    username = serializers.CharField(min_length=8, required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    email = serializers.EmailField(required=True,
+                                   validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(min_length=8, required=True,
+                                     validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(min_length=8, required=True)
     password_confirm = serializers.CharField(min_length=8, required=True,)
 
     class Meta:
         model = User
         fields = ('username', 'password', 'password_confirm', 'email')
-        read_only_fields = ('password', 'passwordConfirm',)
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        user = User(attrs['username'], attrs['email'], attrs['password'])
+        errors = dict()
+
+        try:
+            validators.validate_password(password=attrs['password'], user=user)
+        except exceptions.ValidationError as error:
+            errors['password'] = list(error.messages)
+
+        if errors:
+            raise serializers.ValidationError(errors)
 
         return attrs
