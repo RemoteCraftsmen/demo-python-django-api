@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from ..serializers import UserSerializer
+from ToDo.serializers import UserSerializer
 from django.contrib.auth.models import User
 
 
