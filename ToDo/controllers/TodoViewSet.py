@@ -1,4 +1,4 @@
-from rest_framework import viewsets,status
+from rest_framework import viewsets, status
 from ToDo.serializers.TodoSerializer import TodoSerializer
 from ToDo.models import Todo
 from ToDo.permissions.IsOwnerOrAdmin import IsOwnerOrAdmin
@@ -19,7 +19,6 @@ class TodoViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Todo.objects.all()
         return Todo.objects.filter(owner=self.request.user.id)
-
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data, context={

@@ -65,21 +65,28 @@ class IndexTest(TestCase):
 
         response = self.client.get('/api/todos/')
         data = response.data
+        self.assertIn('next', data)
+        self.assertIn('previous', data)
 
-        self.assertEqual(len(self.user_1_items), len(data))
+        count = data['count']
+        self.assertEqual(len(self.user_1_items), count)
+
+
+        results = data['results']
+        self.assertEqual(len(self.user_1_items), len(results))
 
         for todo_item in self.user_1_items:
-            self.assertTrue(any(item['id'] == str(todo_item.id) for item in data))
-            self.assertTrue(any(item['name'] == str(todo_item.name) for item in data))
-            self.assertTrue(all(str(item['owner']['id']) == str(todo_item.owner.id) for item in data))
+            self.assertTrue(any(item['id'] == str(todo_item.id) for item in results))
+            self.assertTrue(any(item['name'] == str(todo_item.name) for item in results))
+            self.assertTrue(all(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
 
         for todo_item in self.user_2_items:
-            self.assertFalse(any(item['id'] == str(todo_item.id) for item in data))
-            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in data))
+            self.assertFalse(any(item['id'] == str(todo_item.id) for item in results))
+            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
 
         for todo_item in self.admin_items:
-            self.assertFalse(any(item['id'] == str(todo_item.id) for item in data))
-            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in data))
+            self.assertFalse(any(item['id'] == str(todo_item.id) for item in results))
+            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
 
         self.assertEqual(200, response.status_code)
 
@@ -92,14 +99,19 @@ class IndexTest(TestCase):
 
         response = self.client.get('/api/todos/')
         data = response.data
+        self.assertIn('next', data)
+        self.assertIn('previous', data)
 
+        results = data['results']
         all_items = self.user_1_items + self.user_2_items + self.admin_items
+        count = data['count']
+        self.assertEqual(len(all_items), count)
 
-        self.assertEqual(len(all_items), len(data))
+        self.assertEqual(len(all_items), len(results))
 
         for todo_item in all_items:
-            self.assertTrue(any(item['id'] == str(todo_item.id) for item in data))
-            self.assertTrue(any(item['name'] == str(todo_item.name) for item in data))
+            self.assertTrue(any(item['id'] == str(todo_item.id) for item in results))
+            self.assertTrue(any(item['name'] == str(todo_item.name) for item in results))
 
         self.assertEqual(200, response.status_code)
 

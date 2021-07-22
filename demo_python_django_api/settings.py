@@ -142,6 +142,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'ToDo.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication'
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 25
 }
 
 APPEND_SLASH = False
