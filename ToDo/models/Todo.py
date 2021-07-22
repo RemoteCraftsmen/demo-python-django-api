@@ -3,7 +3,7 @@ from django.conf import settings
 import uuid
 
 
-class ToDo(models.Model):
+class Todo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30)
     completed = models.BooleanField(default=False)
