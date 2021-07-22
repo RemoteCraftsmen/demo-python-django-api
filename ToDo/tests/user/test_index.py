@@ -46,14 +46,20 @@ class IndexTest(TestCase):
 
         response = self.client.get('/api/users/')
         data = response.data
+        self.assertIn('next', data)
+        self.assertIn('previous', data)
 
-        self.assertEqual(3, len(data))
+        count = data['count']
+        self.assertEqual(3, count)
+
+        results = data['results']
+        self.assertEqual(3, len(results))
 
         for user in self.users:
-            self.assertTrue(any(str(item['id']) == str(user.id) for item in data))
-            self.assertTrue(any(item['username'] == user.username for item in data))
-            self.assertTrue(any(item['email'] == user.email for item in data))
-            self.assertTrue(any(item['is_staff'] == user.is_staff for item in data))
+            self.assertTrue(any(str(item['id']) == str(user.id) for item in results))
+            self.assertTrue(any(item['username'] == user.username for item in results))
+            self.assertTrue(any(item['email'] == user.email for item in results))
+            self.assertTrue(any(item['is_staff'] == user.is_staff for item in results))
 
         self.assertEqual(200, response.status_code)
 
