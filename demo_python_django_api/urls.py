@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 from ToDo.plugins.error_handlers.noFoundErrorHandle import no_found_error_handle
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 import ToDo.routes
 
@@ -27,13 +28,15 @@ router = routers.DefaultRouter()
 router.register(r'todos', TodoViewSet)
 
 
-
 urlpatterns = [
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
     path('api/', include(router.urls)),
     path('api/', include(ToDo.routes.urlpatterns)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-
 ]
 
 handler404 = no_found_error_handle

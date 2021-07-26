@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from ToDo.serializers.auth import LoginSerializer, ProfileSerializer
 from django.contrib.auth import login
 from operator import itemgetter
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
 class Login(generics.CreateAPIView):
@@ -13,6 +14,13 @@ class Login(generics.CreateAPIView):
     """
     serializer_class = LoginSerializer
 
+    @extend_schema(
+                   responses={
+                       200: ProfileSerializer,
+                       401: OpenApiResponse(description='Unauthorized'),
+                   },
+                   request=LoginSerializer,
+                   tags=["Auth"])
     def post(self, request, **kwargs):
         serializer = LoginSerializer(data=request.data)
 
