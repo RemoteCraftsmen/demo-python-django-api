@@ -4,6 +4,7 @@ from ToDo.serializers.auth import RegisterSerializer, ProfileSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
 class Register(generics.CreateAPIView):
@@ -11,7 +12,11 @@ class Register(generics.CreateAPIView):
     Register new user
     * Requires email, password, username, passwordConfirm  in body section
     """
-
+    @extend_schema(
+            responses={
+                200: ProfileSerializer,
+                401: OpenApiResponse(description='Unauthorized'),
+            }, request=RegisterSerializer, tags=["Auth"])
     def post(self, request, **kwargs):
         serializer = RegisterSerializer(data=request.data)
 

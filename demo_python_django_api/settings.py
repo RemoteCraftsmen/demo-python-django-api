@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'ToDo.apps.TodoConfig',
     'django_seed',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -140,10 +141,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'ToDo.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication'
+        'ToDo.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 25
+    'PAGE_SIZE': 25,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django Todo API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
 }
 
 APPEND_SLASH = False
