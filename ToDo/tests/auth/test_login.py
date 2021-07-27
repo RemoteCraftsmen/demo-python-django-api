@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class LoginTest(TestCase):
     """
-        /api/login
+        POST /api/login
     """
     def setUp(self):
         self.client = APIClient()

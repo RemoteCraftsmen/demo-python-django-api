@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class RegisterTest(TestCase):
     """
-        /api/register
+        POST /api/register
     """
     def setUp(self):
         self.client = APIClient()

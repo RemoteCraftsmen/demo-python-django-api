@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 from ToDo.models.Todo import Todo
 
 
-class IndexTest(TestCase):
+class IndexToDoTest(TestCase):
     """
-        /api/todos
+        GET /api/todos
     """
     def setUp(self):
         self.client = APIClient()
@@ -57,8 +57,11 @@ class IndexTest(TestCase):
         ]
 
     def test_user1_can_see_only_his_items(self):
-        """" Returns Ok(200) as user1 """
-        payload_user = {'email': self.user1Data['email'], 'password': self.user1Data['password']}
+        """" Returns Ok(200) as user """
+        payload_user = {
+            'email': self.user1Data['email'],
+            'password': self.user1Data['password']
+        }
         response = self.client.post('/api/login', payload_user)
 
         self.assertEqual(200, response.status_code)
@@ -70,7 +73,6 @@ class IndexTest(TestCase):
 
         count = data['count']
         self.assertEqual(len(self.user_1_items), count)
-
 
         results = data['results']
         self.assertEqual(len(self.user_1_items), len(results))
@@ -92,7 +94,10 @@ class IndexTest(TestCase):
 
     def test_admin_can_see_only_all_items(self):
         """" Returns Ok(200) as admin """
-        payload_admin = {'email': self.adminData['email'], 'password': self.adminData['password']}
+        payload_admin = {
+            'email': self.adminData['email'],
+            'password': self.adminData['password']
+        }
         response = self.client.post('/api/login', payload_admin)
 
         self.assertEqual(200, response.status_code)
