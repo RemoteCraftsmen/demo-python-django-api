@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 from ToDo.models.Todo import Todo
 
 
-class ShowToDoTest(TestCase):
+class UpdateToDoTest(TestCase):
     """
-        GET /api/todos/:id
+        PUT /api/todos/:id
     """
     def setUp(self):
         self.client = APIClient()
@@ -20,7 +20,6 @@ class ShowToDoTest(TestCase):
         self.user_1 = User.objects.create_user(self.user1Data['username'], self.user1Data['email'],
                                                self.user1Data['password'])
         self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
-
         self.user2Data = {
             'username': 'test_user2',
             'email': 'test_user2@example.com',
@@ -29,37 +28,20 @@ class ShowToDoTest(TestCase):
         self.user_2 = User.objects.create_user(self.user2Data['username'], self.user2Data['email'],
                                                self.user2Data['password'])
         self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)
-
         self.adminData = {
             'username': 'admin',
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
+
         self.admin = User.objects.create_user(self.adminData['username'], self.adminData['email'],
                                               self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)
 
-    def test_user_can_see_only_his_item(self):
-        """" Returns Ok(200) selecting own to-do item  as user """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
-        response = self.client.post('/api/login', payload_user)
-
-        self.assertEqual(200, response.status_code)
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
-        data = response.data
-
-        self.assertEqual(data['id'], str(self.user_1_item.id))
-        self.assertEqual(data['name'], str(self.user_1_item.name))
-        self.assertEqual(data['owner']['id'], self.user_1_item.owner.id)
-        self.assertEqual(200, response.status_code)
-
-    def test_admin_can_see_all_item(self):
-        """" Returns Ok(200) selecting to-do item  as admin """
+    def test_admin_can_update_all_users(self):
+        """" Returns Ok(200) updating user  as admin """
         payload_user = {
             'email': self.adminData['email'],
             'password': self.adminData['password']
@@ -68,30 +50,21 @@ class ShowToDoTest(TestCase):
         response = self.client.post('/api/login', payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
+        payload_new_user_data = {
+            'email': 'newmail@example.com',
+            'username': "new_test_user",
+            'password': self.user1Data['password']}
+
+        response = self.client.put('/api/users/{}/'.format(self.user_2.id), payload_new_user_data)
         data = response.data
 
-        self.assertEqual(data['id'], str(self.user_1_item.id))
-        self.assertEqual(data['name'], str(self.user_1_item.name))
-        self.assertEqual(data['owner']['id'], self.user_1_item.owner.id)
+        self.assertEqual(str(data['id']), str(self.user_2.id))
+        self.assertEqual(data['username'], payload_new_user_data['username'])
+        self.assertEqual(data['email'], payload_new_user_data['email'])
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
-        data = response.data
-        self.assertEqual(data['id'], str(self.user_2_item.id))
-        self.assertEqual(data['name'], str(self.user_2_item.name))
-        self.assertEqual(data['owner']['id'], self.user_2_item.owner.id)
-        self.assertEqual(200, response.status_code)
-
-        response = self.client.get('/api/todos/{}/'.format(self.admin_item.id))
-        data = response.data
-        self.assertEqual(data['id'], str(self.admin_item.id))
-        self.assertEqual(data['name'], str(self.admin_item.name))
-        self.assertEqual(data['owner']['id'], self.admin_item.owner.id)
-        self.assertEqual(200, response.status_code)
-
-    def test_user_can_not_see_other_users_item(self):
-        """" Returns Not_Found(404) selecting to-do item of another user as user """
+    def test_user_can_not_update_other_users(self):
+        """" Returns FORBIDDEN(403) deleting user as user """
         payload_user = {
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
@@ -100,11 +73,34 @@ class ShowToDoTest(TestCase):
         response = self.client.post('/api/login', payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
-        self.assertEqual(404, response.status_code)
+        payload_new_user_data = {
+            'email': 'newmail@example.com',
+            'password': self.user1Data['password']
+        }
+
+        response = self.client.put('/api/users/{}/'.format(self.user_2.id), payload_new_user_data)
+        self.assertEqual(403, response.status_code)
+
+    def test_user_can_not_update_itself(self):
+        """" Returns FORBIDDEN(403) updating user"""
+        payload_user = {
+            'email': self.user1Data['email'],
+            'password': self.user1Data['password']
+        }
+
+        response = self.client.post('/api/login', payload_user)
+        self.assertEqual(200, response.status_code)
+
+        payload_new_user_data = {'email': 'newmail@example.com',
+                                 'username': "new_test_user",
+                                 'password': self.user1Data['password']}
+
+        response = self.client.put('/api/users/{}/'.format(self.user_1.id), payload_new_user_data)
+
+        self.assertEqual(403, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.put('/api/users/{}/'.format(self.user_1.id))
 
         self.assertEqual(403, response.status_code)

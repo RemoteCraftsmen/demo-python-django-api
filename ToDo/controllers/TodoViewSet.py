@@ -30,4 +30,4 @@ class TodoViewSet(viewsets.ModelViewSet):
 
         serializer.save()
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
