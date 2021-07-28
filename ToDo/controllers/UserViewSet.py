@@ -3,6 +3,7 @@ from ToDo.serializers import UserSerializer
 from django.contrib.auth.models import User
 from drf_spectacular.utils import extend_schema_view
 from ToDo.swagger.schemas.UsersSchema import UsersSchema
+from ToDo.filters.UserFilter import UserFilter
 
 
 @extend_schema_view(
@@ -16,3 +17,4 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
     http_method_names = ['get', 'post', 'head', 'put', 'delete']
+    filterset_class =UserFilter
