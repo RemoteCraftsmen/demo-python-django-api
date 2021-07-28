@@ -4,16 +4,22 @@ from ToDo.models import Todo
 from ToDo.permissions.IsOwnerOrAdmin import IsOwnerOrAdmin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema_view
+from ToDo.swagger.schemas.TodoSchema import TodoSchema
 
 
+@extend_schema_view(
+    list=TodoSchema.list,
+    retrieve=TodoSchema.retrieve,
+    create=TodoSchema.create,
+    destroy=TodoSchema.destroy,
+    update=TodoSchema.update
+)
 class TodoViewSet(viewsets.ModelViewSet):
-    """
-    Returns List of all users
-    TODO Remove or split this to separate  dirs and files;
-    """
     permission_classes = [IsOwnerOrAdmin, IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+    http_method_names = ['get', 'post', 'head', 'put', 'delete']
 
     def get_queryset(self):
         if self.request.user.is_staff:
