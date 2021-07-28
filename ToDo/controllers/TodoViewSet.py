@@ -21,14 +21,14 @@ class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     http_method_names = ['get', 'post', 'head', 'put', 'delete']
-    filterset_class =TodoFilter
+    filterset_class = TodoFilter
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return Todo.objects.all()
         return Todo.objects.filter(owner=self.request.user.id)
 
-    def create(self, request):
+    def create(self, request, **kwargs):
         serializer = self.serializer_class(data=request.data, context={
             'request': request,
         })
