@@ -1,9 +1,12 @@
 from django.db import models
+from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
 from django.conf import settings
 import uuid
 
 
-class Todo(models.Model):
+class Todo(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30)
     completed = models.BooleanField(default=False)
