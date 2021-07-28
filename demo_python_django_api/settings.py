@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_seed',
     'rest_framework',
     'drf_spectacular',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 25,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
