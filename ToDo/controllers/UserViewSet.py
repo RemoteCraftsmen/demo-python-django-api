@@ -17,4 +17,4 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
     http_method_names = ['get', 'post', 'head', 'put', 'delete']
-    filterset_class =UserFilter
+    filterset_class = UserFilter

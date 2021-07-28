@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Todo
+from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 
-admin.site.register(Todo)
+from ToDo.models import Todo
 
+
+class SafeDeleteAdminView(SafeDeleteAdmin):
+    list_display = (highlight_deleted, "name", "completed", "owner") + SafeDeleteAdmin.list_display
+    list_filter = ("completed",) + SafeDeleteAdmin.list_filter
+
+
+admin.site.register(Todo, SafeDeleteAdminView)
