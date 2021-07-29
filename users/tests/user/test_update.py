@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from ToDo.models.Todo import Todo
 
 
@@ -17,7 +18,7 @@ class UpdateToDoTest(TestCase):
             'password': 'testing_password_123'
         }
 
-        self.user_1 = User.objects.create_user(self.user1Data['username'], self.user1Data['email'],
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
                                                self.user1Data['password'])
         self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
         self.user2Data = {
@@ -25,7 +26,7 @@ class UpdateToDoTest(TestCase):
             'email': 'test_user2@example.com',
             'password': 'testing_password_123'
         }
-        self.user_2 = User.objects.create_user(self.user2Data['username'], self.user2Data['email'],
+        self.user_2 = get_user_model().objects.create_user(self.user2Data['username'], self.user2Data['email'],
                                                self.user2Data['password'])
         self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)
         self.adminData = {
@@ -34,7 +35,7 @@ class UpdateToDoTest(TestCase):
             'password': 'testing_password_123'
         }
 
-        self.admin = User.objects.create_user(self.adminData['username'], self.adminData['email'],
+        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
                                               self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()

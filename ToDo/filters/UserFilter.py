@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class UserFilter(filters.FilterSet):
@@ -9,5 +9,5 @@ class UserFilter(filters.FilterSet):
     email_like = filters.CharFilter(field_name='email', lookup_expr='contains')
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active')

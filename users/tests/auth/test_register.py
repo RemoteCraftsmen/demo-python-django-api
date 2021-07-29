@@ -1,60 +1,62 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
-class LoginTest(TestCase):
+class RegisterTest(TestCase):
     """
-        POST /api/login
+        POST /api/register
     """
     def setUp(self):
         self.client = APIClient()
-        self.username = 'test_user'
-        self.email = 'test_user@example.com'
-        self.password = 'testing_password_123'
-        User.objects.create_user(self.username, self.email, self.password)
 
     def test_valid_data(self):
         """" Returns OK(200) sending valid data """
-        payload = {'email': self.email, 'password': self.password}
-        response = self.client.post('/api/login', payload)
+        email = 'new_test_user@example.com'
+        password = 'new_password'
+        password_confirm = 'new_password'
+        username = 'new_user'
+
+        payload = {'email': email, 'password': password, 'password_confirm': password_confirm, 'username': username}
+        response = self.client.post('/api/register', payload)
         data = response.data
 
         self.assertNotIn('errors', data)
-        self.assertEqual(data['username'], self.username)
-        self.assertEqual(data['email'], self.email)
+        self.assertEqual(data['username'], username)
+        self.assertEqual(data['email'], email)
         self.assertEqual(200, response.status_code)
+
+        user_to_check = get_user_model().objects.filter(email=email, username=username).first()
+        self.assertIsNotNone(user_to_check)
+        self.assertTrue(user_to_check.check_password(password))
 
     def test_no_data(self):
         """" Returns bad request(400) sending  no data """
-        response = self.client.post('/api/login')
+        response = self.client.post('/api/register')
         data = response.data
 
         self.assertIn('errors', data)
         errors = data['errors']
         self.assertIn('email', errors)
         self.assertIn('password', errors)
+        self.assertIn('username', errors)
+        self.assertIn('password_confirm', errors)
+
+        self.assertEqual(errors['username'][0], 'This field is required.')
         self.assertEqual(errors['email'][0], 'This field is required.')
+        self.assertEqual(errors['password_confirm'][0], 'This field is required.')
         self.assertEqual(errors['password'][0], 'This field is required.')
         self.assertEqual(400, response.status_code)
 
     def test_invalid_data(self):
         """" Returns bad request(400) sending invalid email address """
         payload = {'email': "not_valid_email"}
-        response = self.client.post('/api/login', payload)
+        response = self.client.post('/api/register', payload)
         data = response.data
 
         self.assertIn('errors', data)
         errors = data['errors']
         self.assertIn('email', errors)
-        self.assertIn('password', errors)
         self.assertEqual(errors['email'][0], 'Enter a valid email address.')
-        self.assertEqual(errors['password'][0], 'This field is required.')
         self.assertEqual(400, response.status_code)
-
-    def test_wrong_data(self):
-        """" Returns Unauthorized(401) sending wrong data """
-        payload = {'email': self.email, 'password': 'wrong_password'}
-        response = self.client.post('/api/login', payload)
-
-        self.assertEqual(401, response.status_code)

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from ToDo.models.Todo import Todo
 
 
@@ -17,16 +17,16 @@ class CreateToDoTest(TestCase):
             'password': 'testing_password_123'
         }
 
-        self.user_1 = User.objects.create_user(self.user1Data['username'], self.user1Data['email'],
-                                               self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
+                                                           self.user1Data['password'])
 
         self.adminData = {
             'username': 'admin',
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
-        self.admin = User.objects.create_user(self.adminData['username'], self.adminData['email'],
-                                              self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
+                                                          self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)
@@ -47,7 +47,7 @@ class CreateToDoTest(TestCase):
         data = response.data
 
         self.assertEqual(payload_todo['name'], data['name'])
-        self.assertEqual(self.user_1.id, data['owner']['id'])
+        self.assertEqual(str(self.user_1.id), data['owner']['id'])
         created_item = Todo.objects.filter(id=data['id']).exists()
         self.assertTrue(created_item)
 
@@ -73,7 +73,7 @@ class CreateToDoTest(TestCase):
 
         self.assertEqual(payload_todo['name'], data['name'])
 
-        self.assertEqual(self.user_1.id, data['owner']['id'])
+        self.assertEqual(str(self.user_1.id), data['owner']['id'])
 
         created_item = Todo.objects.filter(id=data['id']).exists()
 
@@ -99,7 +99,7 @@ class CreateToDoTest(TestCase):
         data = response.data
         errors = data['errors']
 
-        self.assertEqual('A valid integer is required.', errors['owner_id'][0])
+        self.assertEqual('Must be a valid UUID.', errors['owner_id'][0])
 
         self.assertEqual(400, response.status_code)
 
@@ -121,7 +121,7 @@ class CreateToDoTest(TestCase):
         data = response.data
 
         self.assertEqual(payload_todo['name'], data['name'])
-        self.assertEqual(self.user_1.id, data['owner']['id'])
+        self.assertEqual(str(self.user_1.id), data['owner']['id'])
         created_item = Todo.objects.filter(id=data['id']).exists()
         self.assertTrue(created_item)
 

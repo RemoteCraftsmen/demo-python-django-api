@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from ToDo.models.Todo import Todo
 
 
@@ -17,8 +17,8 @@ class ShowToDoTest(TestCase):
             'password': 'testing_password_123'
         }
 
-        self.user_1 = User.objects.create_user(self.user1Data['username'], self.user1Data['email'],
-                                               self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
+                                                           self.user1Data['password'])
         self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
 
         self.user2Data = {
@@ -26,8 +26,8 @@ class ShowToDoTest(TestCase):
             'email': 'test_user2@example.com',
             'password': 'testing_password_123'
         }
-        self.user_2 = User.objects.create_user(self.user2Data['username'], self.user2Data['email'],
-                                               self.user2Data['password'])
+        self.user_2 = get_user_model().objects.create_user(self.user2Data['username'], self.user2Data['email'],
+                                                           self.user2Data['password'])
         self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)
 
         self.adminData = {
@@ -35,8 +35,8 @@ class ShowToDoTest(TestCase):
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
-        self.admin = User.objects.create_user(self.adminData['username'], self.adminData['email'],
-                                              self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
+                                                          self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)
@@ -55,7 +55,7 @@ class ShowToDoTest(TestCase):
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
         self.assertEqual(data['name'], str(self.user_1_item.name))
-        self.assertEqual(data['owner']['id'], self.user_1_item.owner.id)
+        self.assertEqual(data['owner']['id'], str(self.user_1_item.owner.id))
         self.assertEqual(200, response.status_code)
 
     def test_admin_can_see_all_item(self):
@@ -73,21 +73,21 @@ class ShowToDoTest(TestCase):
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
         self.assertEqual(data['name'], str(self.user_1_item.name))
-        self.assertEqual(data['owner']['id'], self.user_1_item.owner.id)
+        self.assertEqual(data['owner']['id'], str(self.user_1_item.owner.id))
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
         data = response.data
         self.assertEqual(data['id'], str(self.user_2_item.id))
         self.assertEqual(data['name'], str(self.user_2_item.name))
-        self.assertEqual(data['owner']['id'], self.user_2_item.owner.id)
+        self.assertEqual(data['owner']['id'], str(self.user_2_item.owner.id))
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/todos/{}/'.format(self.admin_item.id))
         data = response.data
         self.assertEqual(data['id'], str(self.admin_item.id))
         self.assertEqual(data['name'], str(self.admin_item.name))
-        self.assertEqual(data['owner']['id'], self.admin_item.owner.id)
+        self.assertEqual(data['owner']['id'], str(self.admin_item.owner.id))
         self.assertEqual(200, response.status_code)
 
     def test_user_can_not_see_other_users_item(self):

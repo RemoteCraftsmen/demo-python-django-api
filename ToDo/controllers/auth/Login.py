@@ -1,6 +1,6 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from ToDo.serializers.auth import LoginSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
@@ -28,12 +28,12 @@ class Login(generics.CreateAPIView):
             return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         email, password = itemgetter('email', 'password')(request.data)
-
-        logged_user = User.objects.filter(email=email).first()
+        logged_user = get_user_model().objects.filter(email=email).first()
 
         if logged_user is None or not logged_user.check_password(password):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         if logged_user.check_password(password):
             login(request, logged_user)
+
             return Response(BasicUserSerializer(logged_user).data)
