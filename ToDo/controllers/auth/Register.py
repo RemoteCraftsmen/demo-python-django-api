@@ -23,9 +23,9 @@ class Register(generics.CreateAPIView):
         if not serializer.is_valid():
             return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        username, email, password = itemgetter('username', 'email', 'password')(serializer.validated_data)
+        email, password = itemgetter('email', 'password')(serializer.validated_data)
 
-        user = get_user_model().objects.create_user(username, email, password)
+        user = get_user_model().objects.create_user(email, password)
         login(request, user)
 
         return Response(BasicUserSerializer(serializer.data).data)

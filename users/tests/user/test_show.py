@@ -15,7 +15,7 @@ class ShowToDoTest(TestCase):
             'email': 'test_user@example.com',
             'password': 'testing_password_123'
         }
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
                                                            self.user1Data['password'])
 
         self.user2Data = {
@@ -23,7 +23,7 @@ class ShowToDoTest(TestCase):
             'email': 'test_user2@example.com',
             'password': 'testing_password_123'
         }
-        self.user_2 = get_user_model().objects.create_user(self.user2Data['username'], self.user2Data['email'],
+        self.user_2 = get_user_model().objects.create_user(self.user2Data['email'],
                                                            self.user2Data['password'])
 
         self.adminData = {
@@ -31,7 +31,7 @@ class ShowToDoTest(TestCase):
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
-        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
+        self.admin = get_user_model().objects.create_user(self.adminData['email'],
                                                           self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
@@ -50,7 +50,6 @@ class ShowToDoTest(TestCase):
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1.id))
-        self.assertEqual(data['username'], self.user_1.username)
         self.assertEqual(data['email'], self.user_1.email)
         self.assertEqual(data['is_staff'], self.user_1.is_staff)
 

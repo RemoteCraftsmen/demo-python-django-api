@@ -10,10 +10,9 @@ class LoginTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
-        self.username = 'test_user'
         self.email = 'test_user@example.com'
         self.password = 'testing_password_123'
-        get_user_model().objects.create_user(self.username, self.email, self.password)
+        get_user_model().objects.create_user(self.email, self.password)
 
     def test_valid_data(self):
         """" Returns OK(200) sending valid data """
@@ -22,7 +21,6 @@ class LoginTest(TestCase):
         data = response.data
 
         self.assertNotIn('errors', data)
-        self.assertEqual(data['username'], self.username)
         self.assertEqual(data['email'], self.email)
         self.assertEqual(200, response.status_code)
 
