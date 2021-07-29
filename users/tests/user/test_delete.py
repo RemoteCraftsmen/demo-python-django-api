@@ -11,27 +11,24 @@ class DeleteToDoTest(TestCase):
         self.client = APIClient()
 
         self.user1Data = {
-            'username': 'test_user',
             'email': 'test_user@example.com',
             'password': 'testing_password_123'
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
                                                            self.user1Data['password'])
         self.user2Data = {
-            'username': 'test_user2',
             'email': 'test_user2@example.com',
             'password': 'testing_password_123'
         }
-        self.user_2 = get_user_model().objects.create_user(self.user2Data['username'], self.user2Data['email'],
+        self.user_2 = get_user_model().objects.create_user(self.user2Data['email'],
                                                            self.user2Data['password'])
         self.adminData = {
-            'username': 'admin',
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
 
-        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
+        self.admin = get_user_model().objects.create_user(self.adminData['email'],
                                                           self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()

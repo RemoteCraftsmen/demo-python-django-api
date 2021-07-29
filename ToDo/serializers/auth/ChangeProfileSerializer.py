@@ -7,11 +7,8 @@ class ChangeProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'last_name', 'first_name', 'password_confirm']
+        fields = ['email', 'last_name', 'first_name', 'password_confirm']
 
-        extra_kwargs = {
-             'username': {'required': False}
-        }
 
     def validate(self, attrs):
         user = self.instance

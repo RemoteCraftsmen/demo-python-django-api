@@ -13,20 +13,18 @@ class CreateUserTest(TestCase):
         self.client = APIClient()
 
         self.user1Data = {
-            'username': 'test_user',
             'email': 'test_user@example.com',
             'password': 'testing_password_123'
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['username'], self.user1Data['email'],
+        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
                                                self.user1Data['password'])
 
         self.adminData = {
-            'username': 'admin',
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
-        self.admin = get_user_model().objects.create_user(self.adminData['username'], self.adminData['email'],
+        self.admin = get_user_model().objects.create_user(self.adminData['email'],
                                               self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
@@ -44,13 +42,11 @@ class CreateUserTest(TestCase):
 
         payload_new_user_data = {
             'email': 'newmail@example.com',
-            'username': "new_test_user",
             'password': self.user1Data['password']}
 
         response = self.client.post('/api/users/', payload_new_user_data)
         data = response.data
 
-        self.assertEqual(data['username'], payload_new_user_data['username'])
         self.assertEqual(data['email'], payload_new_user_data['email'])
         self.assertEqual(201, response.status_code)
 
@@ -65,9 +61,7 @@ class CreateUserTest(TestCase):
         self.assertEqual(200, response.status_code)
 
         response = self.client.post('/api/users/')
-        data = response.data
 
-        self.assertEqual('This field is required.', data['username'][0])
         self.assertEqual(400, response.status_code)
 
     def test_user_can_not_create_other_users(self):

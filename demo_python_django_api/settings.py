@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
+    'ToDo.apps.TodoConfig',
     'users',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,8 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'ToDo.apps.TodoConfig',
     'django_seed',
     'rest_framework',
     'drf_spectacular',

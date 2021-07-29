@@ -23,11 +23,10 @@ class RegisterTest(TestCase):
         data = response.data
 
         self.assertNotIn('errors', data)
-        self.assertEqual(data['username'], username)
         self.assertEqual(data['email'], email)
         self.assertEqual(200, response.status_code)
 
-        user_to_check = get_user_model().objects.filter(email=email, username=username).first()
+        user_to_check = get_user_model().objects.filter(email=email).first()
         self.assertIsNotNone(user_to_check)
         self.assertTrue(user_to_check.check_password(password))
 
@@ -40,10 +39,8 @@ class RegisterTest(TestCase):
         errors = data['errors']
         self.assertIn('email', errors)
         self.assertIn('password', errors)
-        self.assertIn('username', errors)
         self.assertIn('password_confirm', errors)
 
-        self.assertEqual(errors['username'][0], 'This field is required.')
         self.assertEqual(errors['email'][0], 'This field is required.')
         self.assertEqual(errors['password_confirm'][0], 'This field is required.')
         self.assertEqual(errors['password'][0], 'This field is required.')

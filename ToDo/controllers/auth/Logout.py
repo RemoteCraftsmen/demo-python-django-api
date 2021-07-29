@@ -10,6 +10,7 @@ class Logout(APIView):
     Log out from system
     """
     @extend_schema(
+        request=None,
         responses={
             401: OpenApiResponse(description='Unauthorized'),
         }, tags=["Auth"]
