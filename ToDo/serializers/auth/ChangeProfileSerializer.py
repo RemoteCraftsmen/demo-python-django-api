@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class ChangeProfileSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(min_length=8, required=True, write_only=True)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ['username', 'email', 'last_name', 'first_name', 'password_confirm']
 
         extra_kwargs = {

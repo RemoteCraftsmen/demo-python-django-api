@@ -6,14 +6,14 @@ from ToDo.serializers import UserSerializer
 
 class UsersSchema:
     list = extend_schema(description='Returns list of all users.', responses={200: UserSerializer, 403: forbidden},
-                         tags=["Users"])
+                         tags=["users"])
     retrieve = extend_schema(
         description='Returns details of user',
         responses={
             200: UserSerializer,
             403: forbidden
         },
-        tags=["Users"])
+        tags=["users"])
 
     create = extend_schema(
         description='Creates new user.',
@@ -22,7 +22,7 @@ class UsersSchema:
             400: bad_request,
             403: forbidden
         },
-        tags=["Users"])
+        tags=["users"])
 
     destroy = extend_schema(
         description='Removes user.',
@@ -30,7 +30,7 @@ class UsersSchema:
             200: UserSerializer,
             403: forbidden
         },
-        tags=["Users"])
+        tags=["users"])
 
     update = extend_schema(
         description='Updates user',
@@ -39,4 +39,4 @@ class UsersSchema:
             400: bad_request,
             403: forbidden
         },
-        tags=["Users"])
+        tags=["users"])

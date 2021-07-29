@@ -36,14 +36,17 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
+AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'ToDo.apps.TodoConfig',
     'django_seed',
     'rest_framework',

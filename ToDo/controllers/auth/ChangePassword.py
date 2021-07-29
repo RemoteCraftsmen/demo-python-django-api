@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from ToDo.serializers.auth import ChangePasswordSerializer
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class ChangePassword(generics.CreateAPIView):
@@ -10,7 +10,7 @@ class ChangePassword(generics.CreateAPIView):
     * Requires password,newPassword, passwordConfirm  in body section
     """
     def post(self, request, **kwargs):
-        user = User.objects.get(id=request.user.id)
+        user = get_user_model().objects.get(id=request.user.id)
         serializer = ChangePasswordSerializer(data=request.data, context={
             'request': request,
             'user': user

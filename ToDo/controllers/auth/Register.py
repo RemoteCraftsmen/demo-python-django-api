@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from ToDo.serializers.auth import RegisterSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
@@ -25,7 +25,7 @@ class Register(generics.CreateAPIView):
 
         username, email, password = itemgetter('username', 'email', 'password')(serializer.validated_data)
 
-        user = User.objects.create_user(username, email, password)
+        user = get_user_model().objects.create_user(username, email, password)
         login(request, user)
 
         return Response(BasicUserSerializer(serializer.data).data)

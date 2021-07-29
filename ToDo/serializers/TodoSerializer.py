@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from ToDo.models import Todo
 from ToDo.serializers.UserSerializer import UserSerializer
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 
 class TodoSerializer(serializers.ModelSerializer):
     owner = UserSerializer(many=False, read_only=True)
-    owner_id = serializers.IntegerField(write_only=True, required=False)
+    owner_id = serializers.UUIDField(write_only=True, required=False)
 
     class Meta:
         model = Todo
@@ -14,7 +14,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if self.context['request'].user.is_staff and validated_data['owner_id'] is not None:
-            owner = User.objects.filter(id=validated_data['owner_id']).first()
+            owner = get_user_model().objects.filter(id=validated_data['owner_id']).first()
         else:
             owner = self.context['request'].user
 
@@ -24,7 +24,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if self.context['request'].user.is_staff and validated_data['owner_id'] is not None:
-            owner = User.objects.filter(id=validated_data['owner_id']).first()
+            owner = get_user_model().objects.filter(id=validated_data['owner_id']).first()
         else:
             owner = self.context['request'].user
 

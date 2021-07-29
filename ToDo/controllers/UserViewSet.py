@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from ToDo.serializers import UserSerializer
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view
 from ToDo.swagger.schemas.UsersSchema import UsersSchema
 from ToDo.filters.UserFilter import UserFilter
@@ -13,7 +13,7 @@ from ToDo.filters.UserFilter import UserFilter
     destroy=UsersSchema.destroy,
     update=UsersSchema.update)
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.filter(deleted__isnull=True)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
     http_method_names = ['get', 'post', 'head', 'put', 'delete']
