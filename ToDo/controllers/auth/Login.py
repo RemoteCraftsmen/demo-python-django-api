@@ -1,7 +1,7 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from ToDo.serializers.auth import LoginSerializer, ProfileSerializer
+from ToDo.serializers.auth import LoginSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from drf_spectacular.utils import extend_schema, OpenApiResponse
@@ -16,7 +16,7 @@ class Login(generics.CreateAPIView):
 
     @extend_schema(
                    responses={
-                       200: ProfileSerializer,
+                       200: BasicUserSerializer,
                        401: OpenApiResponse(description='Unauthorized'),
                    },
                    request=LoginSerializer,
@@ -36,4 +36,4 @@ class Login(generics.CreateAPIView):
 
         if logged_user.check_password(password):
             login(request, logged_user)
-            return Response(ProfileSerializer(logged_user).data)
+            return Response(BasicUserSerializer(logged_user).data)
