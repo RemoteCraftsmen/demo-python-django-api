@@ -1,6 +1,6 @@
 #demo-python-django-api
 
-## Instalation
+## Installation
 
 ### env
 Create file .env and write your DB configuration 

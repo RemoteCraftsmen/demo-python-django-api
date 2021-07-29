@@ -1,6 +1,6 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
-from ToDo.serializers.auth import RegisterSerializer, ProfileSerializer
+from ToDo.serializers.auth import RegisterSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from django.contrib.auth.models import User
@@ -14,7 +14,7 @@ class Register(generics.CreateAPIView):
     """
     @extend_schema(
             responses={
-                200: ProfileSerializer,
+                200: BasicUserSerializer,
                 401: OpenApiResponse(description='Unauthorized'),
             }, request=RegisterSerializer, tags=["Auth"])
     def post(self, request, **kwargs):
@@ -28,4 +28,4 @@ class Register(generics.CreateAPIView):
         user = User.objects.create_user(username, email, password)
         login(request, user)
 
-        return Response(ProfileSerializer(serializer.data).data)
+        return Response(BasicUserSerializer(serializer.data).data)
