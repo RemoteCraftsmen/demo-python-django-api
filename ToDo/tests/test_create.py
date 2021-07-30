@@ -37,7 +37,7 @@ class CreateToDoTest(TestCase):
         response = self.client.post('/api/login', payload_user)
         self.assertEqual(200, response.status_code)
 
-        payload_todo = {'name': 'Test item'}
+        payload_todo = {'name': 'tests item'}
         response = self.client.post('/api/todos/', payload_todo)
 
         data = response.data
@@ -60,7 +60,7 @@ class CreateToDoTest(TestCase):
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
-            'name': 'Test item',
+            'name': 'tests item',
             'owner_id': self.user_1.id
         }
 
@@ -87,7 +87,7 @@ class CreateToDoTest(TestCase):
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
-            'name': 'Test item',
+            'name': 'tests item',
             'owner_id': 'wrong_user_id'
         }
 
@@ -109,7 +109,7 @@ class CreateToDoTest(TestCase):
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
-            'name': 'Test item',
+            'name': 'tests item',
             'owner_id': self.admin.id
         }
 
