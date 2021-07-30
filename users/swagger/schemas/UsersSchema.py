@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
-from ToDo.swagger.responses.forbidden import forbidden
-from ToDo.swagger.responses.bad_request import bad_request
-from ToDo.serializers import UserSerializer
+from users.swagger.responses.forbidden import forbidden
+from users.swagger.responses.bad_request import bad_request
+from users.serializers.UserSerializer import UserSerializer
 
 
 class UsersSchema:

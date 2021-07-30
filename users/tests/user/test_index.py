@@ -59,7 +59,6 @@ class IndexToDoTest(TestCase):
 
         for user in self.users:
             self.assertTrue(any(str(item['id']) == str(user.id) for item in results))
-            self.assertTrue(any(item['username'] == user.username for item in results))
             self.assertTrue(any(item['email'] == user.email for item in results))
             self.assertTrue(any(item['is_staff'] == user.is_staff for item in results))
 

@@ -23,9 +23,11 @@ import ToDo.routes
 
 from rest_framework import routers
 from ToDo.controllers import TodoViewSet
+from users.controllers.UserViewSet import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r'todos', TodoViewSet)
+router.register(r'users', UserViewSet)
 
 
 urlpatterns = [

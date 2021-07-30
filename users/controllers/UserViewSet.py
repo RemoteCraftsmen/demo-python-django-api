@@ -1,9 +1,9 @@
 from rest_framework import viewsets, permissions
-from ToDo.serializers import UserSerializer
+from users.serializers.UserSerializer import UserSerializer
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view
-from ToDo.swagger.schemas.UsersSchema import UsersSchema
-from ToDo.filters.UserFilter import UserFilter
+from users.swagger.schemas.UsersSchema import UsersSchema
+from users.filters.UserFilter import UserFilter
 
 
 @extend_schema_view(
