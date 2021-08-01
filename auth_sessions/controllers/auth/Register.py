@@ -1,6 +1,6 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
-from ToDo.serializers.auth import RegisterSerializer, BasicUserSerializer
+from auth_sessions.serializers import RegisterSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from django.contrib.auth import get_user_model

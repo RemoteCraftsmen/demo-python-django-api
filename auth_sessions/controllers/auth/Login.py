@@ -1,7 +1,7 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from ToDo.serializers.auth import LoginSerializer, BasicUserSerializer
+from auth_sessions.serializers import LoginSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from drf_spectacular.utils import extend_schema, OpenApiResponse

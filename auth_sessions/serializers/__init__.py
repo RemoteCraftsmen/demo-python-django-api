@@ -1,0 +1,7 @@
+from . import *
+from auth_sessions.serializers.LoginSerializer import LoginSerializer
+from auth_sessions.serializers.RegisterSerializer import RegisterSerializer
+from auth_sessions.serializers.BasicUserSerializer import BasicUserSerializer
+from auth_sessions.serializers.ChangePasswordSerializer import ChangePasswordSerializer
+from auth_sessions.serializers.ChangeProfileSerializer import ChangeProfileSerializer
+from auth_sessions.serializers.ProfileSerializer import ProfileSerializer

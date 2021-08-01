@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from ToDo.serializers.auth import ChangePasswordSerializer
+from auth_sessions.serializers import ChangePasswordSerializer
 from django.contrib.auth import get_user_model
 
 

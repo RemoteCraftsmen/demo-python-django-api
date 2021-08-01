@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from ToDo.serializers.TodoSerializer import TodoSerializer
 from ToDo.models import Todo
-from ToDo.permissions.IsOwnerOrAdmin import IsOwnerOrAdmin
+from auth_sessions.permissions.IsOwnerOrAdmin import IsOwnerOrAdmin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view

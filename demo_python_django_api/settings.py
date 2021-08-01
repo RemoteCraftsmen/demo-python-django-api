@@ -41,6 +41,7 @@ AUTH_USER_MODEL = 'users.User'
 INSTALLED_APPS = [
     'ToDo.apps.TodoConfig',
     'users',
+    'auth_sessions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,7 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'ToDo.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication',
+        'auth_sessions.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 25,

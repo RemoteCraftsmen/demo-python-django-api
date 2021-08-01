@@ -1,4 +1,4 @@
-from ToDo.controllers.profile.Show import Show
+from auth_sessions.controllers.profile.Show import Show
 from django.urls import path
 
 

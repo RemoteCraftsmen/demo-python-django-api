@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-from ToDo.plugins.error_handlers.noFoundErrorHandle import no_found_error_handle
+from auth_sessions.plugins.error_handlers import no_found_error_handle
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-
-import ToDo.routes
 
 from rest_framework import routers
 from ToDo.controllers import TodoViewSet
 from users.controllers.UserViewSet import UserViewSet
+from auth_sessions.routes import urlpatterns as auth_sessions_routes
+
 
 router = routers.DefaultRouter()
 router.register(r'todos', TodoViewSet)
@@ -36,7 +36,7 @@ urlpatterns = [
     path('', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     path('api/', include(router.urls)),
-    path('api/', include(ToDo.routes.urlpatterns)),
+    path('api/', include(auth_sessions_routes)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 ]

@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from ToDo.serializers.auth import Profile
+from auth_sessions.serializers import ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -9,7 +9,7 @@ class Show(generics.RetrieveAPIView):
     """
     Shows logged user data(profile).
     """
-    serializer_class = Profile
+    serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
