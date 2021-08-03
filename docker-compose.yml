@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     container_name: postgres.djangoToDo.docker
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
