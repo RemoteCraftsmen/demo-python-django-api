@@ -9,6 +9,9 @@ class ChangeProfile(generics.UpdateAPIView):
     Change user data for logged user
     * Requires passwordConfirm  in body section
     """
+    serializer_class = ChangeProfileSerializer
+    http_method_names = ['put']
+
     def put(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
 
