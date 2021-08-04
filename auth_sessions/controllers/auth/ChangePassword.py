@@ -9,6 +9,8 @@ class ChangePassword(generics.CreateAPIView):
     Change password for logged user
     * Requires password,newPassword, passwordConfirm  in body section
     """
+    serializer_class = ChangePasswordSerializer
+
     def post(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
         serializer = ChangePasswordSerializer(data=request.data, context={

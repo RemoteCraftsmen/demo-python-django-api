@@ -23,6 +23,7 @@ from rest_framework import routers
 from ToDo.controllers import TodoViewSet
 from users.controllers.UserViewSet import UserViewSet
 from auth_sessions.routes import urlpatterns as auth_sessions_routes
+from password_reset.routes.reset_password import urls as password_reset_routes
 
 
 router = routers.DefaultRouter()
@@ -37,6 +38,7 @@ urlpatterns = [
 
     path('api/', include(router.urls)),
     path('api/', include(auth_sessions_routes)),
+    path('api/', include(password_reset_routes)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 ]

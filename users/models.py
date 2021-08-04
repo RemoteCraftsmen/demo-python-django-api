@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from safedelete.models import SafeDeleteModel, SOFT_DELETE
 import uuid
 from django.utils.translation import gettext_lazy as _
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 
 class UserManager(BaseUserManager):
@@ -45,12 +47,20 @@ class User(AbstractUser, SafeDeleteModel):
     username = None
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
+    passwordResetToken = models.CharField(null=True, max_length=200)
+    passwordResetTokenExpiresAt = models.DateTimeField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    def is_password_reset_token_expired(self):
+        return (self.passwordResetTokenExpiresAt is None) \
+               or \
+               (make_aware(datetime.now()) > self.passwordResetTokenExpiresAt)
+
     def __str__(self):
         return self.email
+
 
     class Meta:
         db_table = 'auth_user'

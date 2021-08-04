@@ -41,6 +41,7 @@ AUTH_USER_MODEL = 'users.User'
 INSTALLED_APPS = [
     'ToDo.apps.TodoConfig',
     'users',
+    'password_reset',
     'auth_sessions',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_filters',
     'safedelete',
+    'mail_templated'
 ]
 
 MIDDLEWARE = [
@@ -163,3 +165,13 @@ SPECTACULAR_SETTINGS = {
 }
 
 APPEND_SLASH = False
+
+
+EMAIL_HOST = '127.0.0.1'
+DEFAULT_FROM_EMAIL = 'kuwago <kuwago@example.com>'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
+
+FRONTEND_URL = '127.0.0.1:8000/'
