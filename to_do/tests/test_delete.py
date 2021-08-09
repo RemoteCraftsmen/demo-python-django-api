@@ -42,7 +42,7 @@ class DeleteTodoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.delete('/api/todos/{}/'.format(self.user_1_item.id))
@@ -59,7 +59,7 @@ class DeleteTodoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
@@ -86,7 +86,7 @@ class DeleteTodoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)

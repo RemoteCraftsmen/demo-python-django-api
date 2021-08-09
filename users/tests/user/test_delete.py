@@ -40,7 +40,7 @@ class DeleteToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.delete('/api/users/{}/'.format(self.user_2.id))
@@ -56,7 +56,7 @@ class DeleteToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.delete('/api/users/{}/'.format(self.user_2.id))

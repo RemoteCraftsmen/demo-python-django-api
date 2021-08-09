@@ -57,7 +57,7 @@ class IndexToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
 
         self.assertEqual(200, response.status_code)
 
@@ -93,7 +93,7 @@ class IndexToDoTest(TestCase):
             'email': self.adminData['email'],
             'password': self.adminData['password']
         }
-        response = self.client.post('/api/login', payload_admin)
+        response = self.client.post('/api/auth/login', payload_admin)
 
         self.assertEqual(200, response.status_code)
 

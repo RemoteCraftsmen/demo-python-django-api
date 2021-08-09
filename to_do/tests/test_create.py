@@ -34,7 +34,7 @@ class CreateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {'name': 'tests item'}
@@ -56,7 +56,7 @@ class CreateToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -83,7 +83,7 @@ class CreateToDoTest(TestCase):
             'email': self.adminData['email'],
             'password': self.adminData['password']
         }
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -105,7 +105,7 @@ class CreateToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -130,7 +130,7 @@ class CreateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.post('/api/todos/')

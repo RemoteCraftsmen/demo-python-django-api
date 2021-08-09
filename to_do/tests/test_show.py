@@ -44,7 +44,7 @@ class ShowToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
 
         self.assertEqual(200, response.status_code)
         response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
@@ -62,7 +62,7 @@ class ShowToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
@@ -94,7 +94,7 @@ class ShowToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
