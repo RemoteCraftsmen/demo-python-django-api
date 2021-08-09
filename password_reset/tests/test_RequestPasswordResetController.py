@@ -31,7 +31,7 @@ class RequestPasswordResetController(TestCase):
             'email': self.user1Data['email'],
         }
 
-        response = self.client.post('/api/password-reset', payload_user)
+        response = self.client.post('/api/auth/password-reset', payload_user)
 
         user = get_user_model().objects.filter(email=self.user1Data['email']).first()
 
@@ -47,13 +47,13 @@ class RequestPasswordResetController(TestCase):
             'email': 'example@example.com',
         }
 
-        response = self.client.post('/api/password-reset', payload_user)
+        response = self.client.post('/api/auth/password-reset', payload_user)
 
         self.assertEqual(200, response.status_code)
 
     def test_no_data(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.post('/api/password-reset')
+        response = self.client.post('/api/auth/password-reset')
 
         self.assertEqual(400, response.status_code)
 
@@ -63,6 +63,6 @@ class RequestPasswordResetController(TestCase):
             'email': 'not_a_email',
         }
 
-        response = self.client.post('/api/password-reset', payload_user)
+        response = self.client.post('/api/auth/password-reset', payload_user)
 
         self.assertEqual(400, response.status_code)

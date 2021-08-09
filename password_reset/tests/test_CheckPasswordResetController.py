@@ -34,7 +34,7 @@ class Test_CheckPasswordResetController(TestCase):
             'password_confirm': password
         }
 
-        response = self.client.post('/api/password-reset/{}'.format(user.passwordResetToken), payload_user)
+        response = self.client.post('/api/auth/password-reset/{}'.format(user.passwordResetToken), payload_user)
 
         self.assertEqual(200, response.status_code)
 
@@ -44,7 +44,7 @@ class Test_CheckPasswordResetController(TestCase):
         self.assertTrue(user.is_password_reset_token_expired())
 
         payload = {'email': self.user1Data['email'], 'password': password}
-        response = self.client.post('/api/login', payload)
+        response = self.client.post('/api/auth/login', payload)
         self.assertEqual(200, response.status_code)
 
     def test_old_token(self):
@@ -62,11 +62,11 @@ class Test_CheckPasswordResetController(TestCase):
             'password_confirm': password
         }
 
-        response = self.client.post('/api/password-reset/{}'.format(user.passwordResetToken), payload_user)
+        response = self.client.post('/api/auth/password-reset/{}'.format(user.passwordResetToken), payload_user)
         self.assertEqual(204, response.status_code)
 
         payload = {'email': self.user1Data['email'], 'password': password}
-        response = self.client.post('/api/login', payload)
+        response = self.client.post('/api/auth/login', payload)
         self.assertEqual(401, response.status_code)
 
     def test_no_data(self):
@@ -76,7 +76,7 @@ class Test_CheckPasswordResetController(TestCase):
         user.passwordResetTokenExpiresAt = DateService.tomorrow()
         user.save()
 
-        response = self.client.post('/api/password-reset/{}'.format(user.passwordResetToken))
+        response = self.client.post('/api/auth/password-reset/{}'.format(user.passwordResetToken))
         data = response.data
 
         self.assertEqual("This field is required.", data['password'][0])
@@ -98,7 +98,7 @@ class Test_CheckPasswordResetController(TestCase):
             'password_confirm': password+password
         }
 
-        response = self.client.post('/api/password-reset/{}'.format(user.passwordResetToken), payload)
+        response = self.client.post('/api/auth/password-reset/{}'.format(user.passwordResetToken), payload)
         data = response.data
 
         self.assertEqual("Password fields didn't match.", data['password'][0])

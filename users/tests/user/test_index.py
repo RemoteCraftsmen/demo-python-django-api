@@ -43,7 +43,7 @@ class IndexToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/users/')
@@ -67,7 +67,7 @@ class IndexToDoTest(TestCase):
     def test_user_can_not_see_users(self):
         """" Returns Forbidden(403) as user """
         payload_user = {'email': self.user1Data['email'], 'password': self.user1Data['password']}
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.get('/api/users/')

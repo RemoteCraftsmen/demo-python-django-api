@@ -46,7 +46,7 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_item = {
@@ -70,7 +70,7 @@ class UpdateToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_item = {
@@ -95,7 +95,7 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.put('/api/todos/{}/'.format(self.user_2_item.id))

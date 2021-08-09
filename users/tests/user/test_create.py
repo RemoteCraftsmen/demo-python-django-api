@@ -37,7 +37,7 @@ class CreateUserTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -57,7 +57,7 @@ class CreateUserTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         response = self.client.post('/api/users/')
@@ -71,7 +71,7 @@ class CreateUserTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/login', payload_user)
+        response = self.client.post('/api/auth/login', payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
