@@ -1,6 +1,5 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-#from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
 
@@ -18,14 +17,14 @@ class CreateUserTest(TestCase):
         }
 
         self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                               self.user1Data['password'])
+                                                           self.user1Data['password'])
 
         self.adminData = {
             'email': 'admin@example.com',
             'password': 'testing_password_123'
         }
         self.admin = get_user_model().objects.create_user(self.adminData['email'],
-                                              self.adminData['password'])
+                                                          self.adminData['password'])
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)

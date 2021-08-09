@@ -9,7 +9,6 @@ class ChangeProfileSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ['email', 'last_name', 'first_name', 'password_confirm']
 
-
     def validate(self, attrs):
         user = self.instance
         errors = dict()

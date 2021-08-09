@@ -5,7 +5,7 @@ from password_reset.services.PasswordResetTokenGeneratorHandler import PasswordR
 from password_reset.services.DateService import DateService
 
 
-class Test_CheckPasswordResetController(TestCase):
+class TestCheckPasswordResetController(TestCase):
     """
         POST /api/todos
     """

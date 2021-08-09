@@ -1,4 +1,4 @@
-from rest_framework import status, generics
+from rest_framework import generics
 from rest_framework.response import Response
 from auth_sessions.serializers import RegisterSerializer, BasicUserSerializer
 from django.contrib.auth import login
