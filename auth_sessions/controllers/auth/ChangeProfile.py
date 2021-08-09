@@ -4,6 +4,7 @@ from auth_sessions.serializers import ChangeProfileSerializer
 from django.contrib.auth import get_user_model
 from auth_sessions.swagger.responses.bad_request import bad_request
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework.permissions import IsAuthenticated
 
 
 class ChangeProfile(generics.UpdateAPIView):
@@ -13,6 +14,7 @@ class ChangeProfile(generics.UpdateAPIView):
     """
     serializer_class = ChangeProfileSerializer
     http_method_names = ['put']
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
                    responses={

@@ -1,7 +1,6 @@
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
-
-
 from auth_sessions.plugins.authentication.CsrfExemptSessionAuthentication import CsrfExemptSessionAuthentication
+
 
 class CustomSessionScheme(OpenApiAuthenticationExtension):
     name = "cookieAuth"
@@ -14,10 +13,3 @@ class CustomSessionScheme(OpenApiAuthenticationExtension):
             'in': 'cookie',
             'name': 'sessionid',
         }
-
-
-
-
-
-
-

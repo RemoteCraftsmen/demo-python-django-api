@@ -12,11 +12,3 @@ bad_request = {
                         "This field must be unique."
                     ]},
                 }
-
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@ from auth_sessions.serializers import ChangePasswordSerializer
 from django.contrib.auth import get_user_model
 from auth_sessions.swagger.responses.bad_request import bad_request
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework.permissions import IsAuthenticated
 
 
 class ChangePassword(generics.CreateAPIView):
@@ -12,6 +13,7 @@ class ChangePassword(generics.CreateAPIView):
     * Requires password,newPassword, passwordConfirm  in body section
     """
     serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
                    responses={
@@ -21,11 +23,10 @@ class ChangePassword(generics.CreateAPIView):
                    },
                    request=ChangePasswordSerializer,
                    tags=["Auth"])
-    def post(self, request, **kwargs):
+    def put(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
-        serializer = ChangePasswordSerializer(data=request.data, context={
-            'request': request,
-            'user': user
+        serializer = ChangePasswordSerializer(instance=user, data=request.data, context={
+            'request': request
         })
         serializer.is_valid(raise_exception=True)
         user.set_password(serializer.validated_data['password'])

@@ -12,7 +12,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
-        user = self.context['user']
+        user = self.instance
         errors = dict()
 
         try:
