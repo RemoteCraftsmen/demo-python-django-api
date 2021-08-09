@@ -29,12 +29,10 @@ class LoginTest(TestCase):
         response = self.client.post('/api/auth/login')
         data = response.data
 
-        self.assertIn('errors', data)
-        errors = data['errors']
-        self.assertIn('email', errors)
-        self.assertIn('password', errors)
-        self.assertEqual(errors['email'][0], 'This field is required.')
-        self.assertEqual(errors['password'][0], 'This field is required.')
+        self.assertIn('email', data)
+        self.assertIn('password', data)
+        self.assertEqual(data['email'][0], 'This field is required.')
+        self.assertEqual(data['password'][0], 'This field is required.')
         self.assertEqual(400, response.status_code)
 
     def test_invalid_data(self):
@@ -43,12 +41,10 @@ class LoginTest(TestCase):
         response = self.client.post('/api/auth/login', payload)
         data = response.data
 
-        self.assertIn('errors', data)
-        errors = data['errors']
-        self.assertIn('email', errors)
-        self.assertIn('password', errors)
-        self.assertEqual(errors['email'][0], 'Enter a valid email address.')
-        self.assertEqual(errors['password'][0], 'This field is required.')
+        self.assertIn('email', data)
+        self.assertIn('password', data)
+        self.assertEqual(data['email'][0], 'Enter a valid email address.')
+        self.assertEqual(data['password'][0], 'This field is required.')
         self.assertEqual(400, response.status_code)
 
     def test_wrong_data(self):

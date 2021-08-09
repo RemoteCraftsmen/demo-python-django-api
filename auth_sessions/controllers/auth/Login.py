@@ -24,8 +24,7 @@ class Login(generics.CreateAPIView):
     def post(self, request, **kwargs):
         serializer = LoginSerializer(data=request.data)
 
-        if not serializer.is_valid():
-            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
 
         email, password = itemgetter('email', 'password')(request.data)
         logged_user = get_user_model().objects.filter(email=email).first()

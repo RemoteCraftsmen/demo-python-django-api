@@ -15,6 +15,9 @@ For MySQL:
 
 
 ###Migrate Database:
+
+    python manage.py migrate users
+    python manage.py migrate to_do
     python manage.py migrate
 
 ###Create Super User(Admin)
@@ -28,3 +31,10 @@ Write the data for admin account
 ###Run Server 
     python manage.py runserver
 
+or
+    
+    python manage.py runserver Port_number(for example 7000)
+
+
+###Run Tests
+    python manage.py test
