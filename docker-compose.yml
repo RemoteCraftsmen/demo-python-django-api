@@ -21,7 +21,7 @@ services:
         container_name: mailcatcher.nodejs-express-api.docker
         restart: unless-stopped
         ports:
-            - 127.0.0.1:${MAIL_PORT}:1025
+            - 127.0.0.1:${EMAIL_PORT}:1025
             - 127.0.0.1:1080:1080
         networks:
             - global
