@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from operator import itemgetter
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from auth_sessions.swagger.responses.bad_request import bad_request
 
 
 class Register(generics.CreateAPIView):
@@ -16,6 +17,7 @@ class Register(generics.CreateAPIView):
             responses={
                 200: BasicUserSerializer,
                 401: OpenApiResponse(description='Unauthorized'),
+                400: bad_request
             }, request=RegisterSerializer, tags=["Auth"])
     def post(self, request, **kwargs):
         serializer = RegisterSerializer(data=request.data)
