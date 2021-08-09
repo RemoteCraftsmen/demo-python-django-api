@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from ToDo.models.Todo import Todo
+from to_do.models.Todo import Todo
 
 
 class UpdateToDoTest(TestCase):
