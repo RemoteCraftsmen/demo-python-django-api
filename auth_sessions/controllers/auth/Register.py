@@ -20,8 +20,7 @@ class Register(generics.CreateAPIView):
     def post(self, request, **kwargs):
         serializer = RegisterSerializer(data=request.data)
 
-        if not serializer.is_valid():
-            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
 
         email, password = itemgetter('email', 'password')(serializer.validated_data)
 

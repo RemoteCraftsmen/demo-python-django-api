@@ -35,15 +35,13 @@ class RegisterTest(TestCase):
         response = self.client.post('/api/auth/register')
         data = response.data
 
-        self.assertIn('errors', data)
-        errors = data['errors']
-        self.assertIn('email', errors)
-        self.assertIn('password', errors)
-        self.assertIn('password_confirm', errors)
+        self.assertIn('email', data)
+        self.assertIn('password', data)
+        self.assertIn('password_confirm', data)
 
-        self.assertEqual(errors['email'][0], 'This field is required.')
-        self.assertEqual(errors['password_confirm'][0], 'This field is required.')
-        self.assertEqual(errors['password'][0], 'This field is required.')
+        self.assertEqual(data['email'][0], 'This field is required.')
+        self.assertEqual(data['password_confirm'][0], 'This field is required.')
+        self.assertEqual(data['password'][0], 'This field is required.')
         self.assertEqual(400, response.status_code)
 
     def test_invalid_data(self):
@@ -52,8 +50,6 @@ class RegisterTest(TestCase):
         response = self.client.post('/api/auth/register', payload)
         data = response.data
 
-        self.assertIn('errors', data)
-        errors = data['errors']
-        self.assertIn('email', errors)
-        self.assertEqual(errors['email'][0], 'Enter a valid email address.')
+        self.assertIn('email', data)
+        self.assertEqual(data['email'][0], 'Enter a valid email address.')
         self.assertEqual(400, response.status_code)
