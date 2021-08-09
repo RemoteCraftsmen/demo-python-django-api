@@ -1,0 +1,6 @@
+EMAIL_HOST = '127.0.0.1'
+DEFAULT_FROM_EMAIL = 'kuwago <kuwago@example.com>'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
