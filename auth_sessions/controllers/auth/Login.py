@@ -5,6 +5,7 @@ from auth_sessions.serializers import LoginSerializer, BasicUserSerializer
 from django.contrib.auth import login
 from operator import itemgetter
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from auth_sessions.swagger.responses.bad_request import bad_request
 
 
 class Login(generics.CreateAPIView):
@@ -18,6 +19,7 @@ class Login(generics.CreateAPIView):
                    responses={
                        200: BasicUserSerializer,
                        401: OpenApiResponse(description='Unauthorized'),
+                       400: bad_request
                    },
                    request=LoginSerializer,
                    tags=["Auth"])
