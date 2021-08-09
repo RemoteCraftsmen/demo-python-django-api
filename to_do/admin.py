@@ -1,7 +1,7 @@
 from django.contrib import admin
 from safedelete.admin import SafeDeleteAdmin, highlight_deleted
 
-from ToDo.models import Todo
+from to_do.models import Todo
 
 
 class SafeDeleteAdminView(SafeDeleteAdmin):

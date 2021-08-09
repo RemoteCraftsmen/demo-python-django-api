@@ -1,5 +1,5 @@
 INSTALLED_APPS = [
-    'ToDo.apps.TodoConfig',
+    'to_do.apps.TodoConfig',
     'users',
     'password_reset',
     'auth_sessions',

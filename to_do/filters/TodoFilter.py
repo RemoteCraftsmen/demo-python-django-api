@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from ToDo.models import Todo
+from to_do.models import Todo
 
 
 class TodoFilter(filters.FilterSet):

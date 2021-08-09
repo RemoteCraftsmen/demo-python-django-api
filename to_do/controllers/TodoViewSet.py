@@ -1,12 +1,12 @@
 from rest_framework import viewsets, status
-from ToDo.serializers.TodoSerializer import TodoSerializer
-from ToDo.models import Todo
+from to_do.serializers.TodoSerializer import TodoSerializer
+from to_do.models import Todo
 from auth_sessions.permissions.IsOwnerOrAdmin import IsOwnerOrAdmin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema_view
-from ToDo.swagger.schemas.TodoSchema import TodoSchema
-from ToDo.filters.TodoFilter import TodoFilter
+from to_do.swagger.schemas.TodoSchema import TodoSchema
+from to_do.filters.TodoFilter import TodoFilter
 
 
 @extend_schema_view(
