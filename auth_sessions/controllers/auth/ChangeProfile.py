@@ -27,8 +27,9 @@ class ChangeProfile(generics.UpdateAPIView):
     def put(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
 
-        serializer = ChangeProfileSerializer(instance=user, data=request.data,
-                                             context={'request': request})
+        serializer = self.serializer_class(instance=user,
+                                           data=request.data,
+                                           context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         serializer.save()

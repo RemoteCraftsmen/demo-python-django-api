@@ -11,6 +11,7 @@ class RequestPasswordResetController(generics.CreateAPIView):
     Reset Password
     * Requires email in body section
     """
+    serializer_class = ResetPasswordSerializer
 
     @extend_schema(
                    responses={
@@ -26,7 +27,7 @@ class RequestPasswordResetController(generics.CreateAPIView):
         if user is None or user.is_password_reset_token_expired():
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        serializer = ResetPasswordSerializer(data=request.data, context={'user': user})
+        serializer = self.serializer_class(data=request.data, context={'user': user})
         serializer.is_valid(raise_exception=True)
 
         user.passwordResetTokenExpiresAt = None
