@@ -25,9 +25,10 @@ class ChangePassword(generics.CreateAPIView):
                    tags=["Auth"])
     def put(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
-        serializer = ChangePasswordSerializer(instance=user, data=request.data, context={
-            'request': request
-        })
+        serializer = self.serializer_class(instance=user,
+                                           data=request.data,
+                                           context={'request': request})
+
         serializer.is_valid(raise_exception=True)
         user.set_password(serializer.validated_data['password'])
         user.save()
