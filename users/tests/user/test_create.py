@@ -3,6 +3,8 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class CreateUserTest(TestCase):
@@ -11,39 +13,30 @@ class CreateUserTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
-        self.login_url = reverse('login')
         self.user_list_url = reverse('user-list')
 
         self.user1Data = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.pystr_format()
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                                           self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
 
         self.adminData = {
-            'email': 'admin@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.pystr_format()
         }
-        self.admin = get_user_model().objects.create_user(self.adminData['email'],
-                                                          self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(**self.adminData)
         self.admin.is_staff = True
         self.admin.save()
-        self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)
+        self.admin_item = Todo.objects.create(name=faker.pystr_format(), owner=self.admin)
 
     def test_admin_can_create_users(self):
         """" Returns Created(201) creating user  as admin """
-        payload_user = {
-            'email': self.adminData['email'],
-            'password': self.adminData['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.admin)
 
         payload_new_user_data = {
-            'email': 'newmail@example.com',
+            'email': faker.ascii_safe_email(),
             'password': self.user1Data['password']}
 
         response = self.client.post(self.user_list_url, payload_new_user_data)
@@ -52,37 +45,31 @@ class CreateUserTest(TestCase):
         self.assertEqual(data['email'], payload_new_user_data['email'])
         self.assertEqual(201, response.status_code)
 
+        self.client.logout()
+
     def test_empty_data(self):
         """" Returns Bad Request(400) sending no data  as admin """
-        payload_user = {
-            'email': self.adminData['email'],
-            'password': self.adminData['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.admin)
 
         response = self.client.post(self.user_list_url)
 
         self.assertEqual(400, response.status_code)
 
+        self.client.logout()
+
     def test_user_can_not_create_other_users(self):
         """" Returns FORBIDDEN(403) creating user as user """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.user_1)
 
         payload_new_user_data = {
-            'email': 'newmail@example.com',
+            'email': faker.ascii_safe_email(),
             'password': self.user1Data['password']
         }
 
         response = self.client.post(self.user_list_url, payload_new_user_data)
         self.assertEqual(403, response.status_code)
+
+        self.client.logout()
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """

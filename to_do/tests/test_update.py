@@ -3,6 +3,8 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class UpdateToDoTest(TestCase):
@@ -11,49 +13,40 @@ class UpdateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
-        self.login_url = reverse('login')
 
         self.user1Data = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                                           self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
 
-        self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
+        self.user_1_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_1)
         self.user2Data = {
-            'email': 'test_user2@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
-        self.user_2 = get_user_model().objects.create_user(self.user2Data['email'],
-                                                           self.user2Data['password'])
+        self.user_2 = get_user_model().objects.create_user(**self.user2Data)
 
-        self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)
+        self.user_2_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_2)
 
         self.adminData = {
-            'email': 'admin@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
-        self.admin = get_user_model().objects.create_user(self.adminData['email'],
-                                                          self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(**self.adminData)
         self.admin.is_staff = True
         self.admin.save()
-        self.admin_item = Todo.objects.create(name="admin_item1", owner=self.admin)
+        self.admin_item = Todo.objects.create(name=faker.pystr_format(), owner=self.admin)
 
     def test_user_can_update_its_item(self):
         """" Returns Ok(200) updating to-do item  as admin """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
+        self.client.force_login(self.user_1)
 
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
 
         payload_item = {
-            'name': 'User2_item1',
-            'completed': True
+            'name': faker.pystr_format(),
+            'completed': faker.boolean(chance_of_getting_true=50)
         }
 
         response = self.client.put(reverse('todo-detail', args=[self.user_1_item.id]), payload_item)
@@ -64,21 +57,16 @@ class UpdateToDoTest(TestCase):
         self.assertEqual(data['owner']['id'], str(self.user_1.id))
         self.assertEqual(data['completed'], payload_item['completed'])
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_admin_can_update_all_item(self):
         """" Returns Ok(200) updating to-do item  as admin """
-        payload_user = {
-            'email': self.adminData['email'],
-            'password': self.adminData['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.admin)
 
         payload_item = {
-            'name': 'User2_item1',
+            'name': faker.pystr_format(),
             'owner_id': self.user_2.id,
-            'completed': True
+            'completed': faker.boolean(chance_of_getting_true=50)
         }
 
         response = self.client.put(reverse('todo-detail', args=[self.user_1_item.id]), payload_item)
@@ -89,19 +77,15 @@ class UpdateToDoTest(TestCase):
         self.assertEqual(data['owner']['id'], str(self.user_2.id))
         self.assertEqual(data['completed'], payload_item['completed'])
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_user_can_not_update_other_users_item(self):
         """" Returns Not_Found(404) updating to-do item of another user as user """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.user_1)
 
         response = self.client.put(reverse('todo-detail', args=[self.user_2_item.id]))
         self.assertEqual(404, response.status_code)
+        self.client.logout()
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
