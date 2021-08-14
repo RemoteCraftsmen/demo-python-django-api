@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class UpdateToDoTest(TestCase):
@@ -14,26 +16,22 @@ class UpdateToDoTest(TestCase):
         self.change_password_url = reverse('change_password')
 
         self.userData = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
 
-        self.user = get_user_model().objects.create_user(self.userData['email'],
-                                                         self.userData['password'])
+        self.user = get_user_model().objects.create_user(**self.userData)
 
     def test_user_can_change_password(self):
         """" Returns Ok(200) sending valid data  as user """
-        payload_user = {
-            'email': self.userData['email'],
-            'password': self.userData['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
+        response = self.client.post(self.login_url, self.userData)
         self.assertEqual(200, response.status_code)
 
+        new_password = faker.password(length=14)
+
         payload_new_password = {
-            'password': '$new_password123',
-            'password_confirm': "$new_password123",
+            'password': new_password,
+            'password_confirm': new_password,
             'old_password': self.userData['password']}
 
         response = self.client.put(self.change_password_url, payload_new_password)

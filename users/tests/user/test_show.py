@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class ShowToDoTest(TestCase):
@@ -10,43 +12,30 @@ class ShowToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
-        self.login_url = reverse('login')
 
         self.user1Data = {
-            'username': 'test_user',
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.pystr_format()
         }
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                                           self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
 
         self.user2Data = {
-            'username': 'test_user2',
-            'email': 'test_user2@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.pystr_format()
         }
-        self.user_2 = get_user_model().objects.create_user(self.user2Data['email'],
-                                                           self.user2Data['password'])
+        self.user_2 = get_user_model().objects.create_user(**self.user2Data)
 
         self.adminData = {
-            'username': 'admin',
-            'email': 'admin@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.pystr_format()
         }
-        self.admin = get_user_model().objects.create_user(self.adminData['email'],
-                                                          self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(**self.adminData)
         self.admin.is_staff = True
         self.admin.save()
 
     def test_admin_can_see_other_user(self):
         """" Returns OK(200) as user """
-        payload_user = {
-            'email': self.adminData['email'],
-            'password': self.adminData['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.admin)
 
         response = self.client.get(reverse('user-detail', args=[self.user_1.id]))
         data = response.data
@@ -56,19 +45,15 @@ class ShowToDoTest(TestCase):
         self.assertEqual(data['is_staff'], self.user_1.is_staff)
 
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_user_can_not_see_another_user(self):
         """" Returns Forbidden(403) as user """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
-
-        response = self.client.post(self.login_url, payload_user)
-        self.assertEqual(200, response.status_code)
+        self.client.force_login(self.user_1)
 
         response = self.client.get(reverse('user-detail', args=[self.user_2.id]))
         self.assertEqual(403, response.status_code)
+        self.client.logout()
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """

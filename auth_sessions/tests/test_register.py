@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class RegisterTest(TestCase):
@@ -14,12 +16,11 @@ class RegisterTest(TestCase):
 
     def test_valid_data(self):
         """" Returns OK(200) sending valid data """
-        email = 'new_test_user@example.com'
-        password = 'new_password'
-        password_confirm = 'new_password'
-        username = 'new_user'
+        email = faker.ascii_safe_email()
+        password = faker.password(length=12)
+        password_confirm = password
 
-        payload = {'email': email, 'password': password, 'password_confirm': password_confirm, 'username': username}
+        payload = {'email': email, 'password': password, 'password_confirm': password_confirm}
         response = self.client.post(self.register_url, payload)
         data = response.data
 

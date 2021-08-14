@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from password_reset.services.PasswordResetTokenGeneratorHandler import PasswordResetTokenGeneratorHandler
 from password_reset.services.DateService import DateService
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class TestCheckPasswordResetController(TestCase):
@@ -15,12 +17,11 @@ class TestCheckPasswordResetController(TestCase):
         self.login_url = reverse('login')
 
         self.user1Data = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                                           self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
 
     def test_admin_can_create_users(self):
         """" Returns Created(201) creating user  as admin """
@@ -29,7 +30,7 @@ class TestCheckPasswordResetController(TestCase):
         user.passwordResetTokenExpiresAt = DateService.tomorrow()
         user.save()
 
-        password = 'M4Y7Tp`Xb4#d~'
+        password = faker.pystr_format()
 
         payload_user = {
             'password': password,
@@ -57,7 +58,7 @@ class TestCheckPasswordResetController(TestCase):
         user.save()
         self.assertTrue(user.is_password_reset_token_expired())
 
-        password = 'M4Y7Tp`Xb4#d~'
+        password = faker.pystr_format()
 
         payload_user = {
             'password': password,
@@ -94,7 +95,7 @@ class TestCheckPasswordResetController(TestCase):
         user.passwordResetTokenExpiresAt = DateService.tomorrow()
         user.save()
 
-        password = 'M4Y7Tp`Xb4#d~'
+        password = faker.pystr_format()
 
         payload = {
             'password': password,

@@ -2,6 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from faker import Factory
+faker = Factory.create()
 
 
 class RequestPasswordResetController(TestCase):
@@ -13,12 +15,11 @@ class RequestPasswordResetController(TestCase):
         self.password_reset_url = reverse('password_reset')
 
         self.user1Data = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+            'email': faker.ascii_safe_email(),
+            'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'],
-                                                           self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
 
     def test_initial_data(self):
         user = get_user_model().objects.filter(email=self.user1Data['email']).first()
@@ -46,7 +47,7 @@ class RequestPasswordResetController(TestCase):
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
         payload_user = {
-            'email': 'example@example.com',
+            'email': faker.ascii_safe_email(),
         }
 
         response = self.client.post(self.password_reset_url, payload_user)
