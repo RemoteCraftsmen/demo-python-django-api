@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class UpdateToDoTest(TestCase):
@@ -9,6 +10,8 @@ class UpdateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.change_profile_url = reverse('change_profile')
 
         self.userData = {
             'email': 'test_user@example.com',
@@ -25,7 +28,7 @@ class UpdateToDoTest(TestCase):
             'password': self.userData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -34,7 +37,7 @@ class UpdateToDoTest(TestCase):
             'first_name': 'Example',
             'password_confirm': self.userData['password']}
 
-        response = self.client.put('/api/auth/change-profile', payload_new_user_data)
+        response = self.client.put(self.change_profile_url, payload_new_user_data)
         data = response.data
 
         self.assertEqual(data['email'], payload_new_user_data['email'])
@@ -49,7 +52,7 @@ class UpdateToDoTest(TestCase):
             'password': self.userData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -58,7 +61,7 @@ class UpdateToDoTest(TestCase):
             'first_name': '',
             'password_confirm': self.userData['password']}
 
-        response = self.client.put('/api/auth/change-profile', payload_new_user_data)
+        response = self.client.put(self.change_profile_url, payload_new_user_data)
         self.assertEqual(400, response.status_code)
         data = response.data
 
@@ -66,6 +69,6 @@ class UpdateToDoTest(TestCase):
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.put('/api/auth/change-profile')
+        response = self.client.put(self.change_profile_url)
 
         self.assertEqual(403, response.status_code)

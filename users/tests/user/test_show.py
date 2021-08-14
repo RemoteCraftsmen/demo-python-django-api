@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class ShowToDoTest(TestCase):
@@ -9,6 +10,7 @@ class ShowToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
 
         self.user1Data = {
             'username': 'test_user',
@@ -43,10 +45,10 @@ class ShowToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/users/{}/'.format(self.user_1.id))
+        response = self.client.get(reverse('user-detail', args=[self.user_1.id]))
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1.id))
@@ -62,14 +64,14 @@ class ShowToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/users/{}/'.format(self.user_2.id))
+        response = self.client.get(reverse('user-detail', args=[self.user_2.id]))
         self.assertEqual(403, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/users/{}/'.format(self.user_1.id))
+        response = self.client.get(reverse('user-detail', args=[self.user_1.id]))
 
         self.assertEqual(403, response.status_code)

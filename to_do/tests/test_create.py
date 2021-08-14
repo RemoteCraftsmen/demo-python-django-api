@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class CreateToDoTest(TestCase):
@@ -10,6 +11,8 @@ class CreateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.todo_list_url = reverse('todo-list')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -34,11 +37,11 @@ class CreateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {'name': 'tests item'}
-        response = self.client.post('/api/todos/', payload_todo)
+        response = self.client.post(self.todo_list_url, payload_todo)
 
         data = response.data
 
@@ -56,7 +59,7 @@ class CreateToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -64,7 +67,7 @@ class CreateToDoTest(TestCase):
             'owner_id': self.user_1.id
         }
 
-        response = self.client.post('/api/todos/', payload_todo)
+        response = self.client.post(self.todo_list_url, payload_todo)
         data = response.data
 
         self.assertEqual(payload_todo['name'], data['name'])
@@ -83,7 +86,7 @@ class CreateToDoTest(TestCase):
             'email': self.adminData['email'],
             'password': self.adminData['password']
         }
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -91,7 +94,7 @@ class CreateToDoTest(TestCase):
             'owner_id': 'wrong_user_id'
         }
 
-        response = self.client.post('/api/todos/', payload_todo)
+        response = self.client.post(self.todo_list_url, payload_todo)
         data = response.data
         errors = data['errors']
 
@@ -105,7 +108,7 @@ class CreateToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_todo = {
@@ -113,7 +116,7 @@ class CreateToDoTest(TestCase):
             'owner_id': self.admin.id
         }
 
-        response = self.client.post('/api/todos/', payload_todo)
+        response = self.client.post(self.todo_list_url, payload_todo)
         data = response.data
 
         self.assertEqual(payload_todo['name'], data['name'])
@@ -130,10 +133,10 @@ class CreateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.post('/api/todos/')
+        response = self.client.post(self.todo_list_url)
         errors = response.data['errors']
 
         self.assertEqual('This field is required.', errors['name'][0])
@@ -141,6 +144,6 @@ class CreateToDoTest(TestCase):
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.post('/api/todos/')
+        response = self.client.post(self.todo_list_url)
 
         self.assertEqual(403, response.status_code)

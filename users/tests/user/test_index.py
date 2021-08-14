@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class IndexToDoTest(TestCase):
@@ -9,6 +10,8 @@ class IndexToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.user_list_url = reverse('user-list')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -42,10 +45,10 @@ class IndexToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/users/')
+        response = self.client.get(self.user_list_url)
         data = response.data
         self.assertIn('next', data)
         self.assertIn('previous', data)
@@ -66,14 +69,14 @@ class IndexToDoTest(TestCase):
     def test_user_can_not_see_users(self):
         """" Returns Forbidden(403) as user """
         payload_user = {'email': self.user1Data['email'], 'password': self.user1Data['password']}
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/users/')
+        response = self.client.get(self.user_list_url)
         self.assertEqual(403, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/users/')
+        response = self.client.get(self.user_list_url)
 
         self.assertEqual(403, response.status_code)

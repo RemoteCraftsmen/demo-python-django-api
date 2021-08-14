@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class IndexToDoTest(TestCase):
@@ -10,6 +11,8 @@ class IndexToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.todo_list_url = reverse('todo-list')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -56,11 +59,11 @@ class IndexToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
 
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/')
+        response = self.client.get(self.todo_list_url)
         data = response.data
         self.assertIn('next', data)
         self.assertIn('previous', data)
@@ -92,11 +95,11 @@ class IndexToDoTest(TestCase):
             'email': self.adminData['email'],
             'password': self.adminData['password']
         }
-        response = self.client.post('/api/auth/login', payload_admin)
+        response = self.client.post(self.login_url, payload_admin)
 
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/')
+        response = self.client.get(self.todo_list_url)
         data = response.data
         self.assertIn('next', data)
         self.assertIn('previous', data)
@@ -116,6 +119,6 @@ class IndexToDoTest(TestCase):
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/todos/')
+        response = self.client.get(self.todo_list_url)
 
         self.assertEqual(403, response.status_code)

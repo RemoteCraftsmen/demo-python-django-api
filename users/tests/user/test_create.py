@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class CreateUserTest(TestCase):
@@ -10,6 +11,8 @@ class CreateUserTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.user_list_url = reverse('user-list')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -36,14 +39,14 @@ class CreateUserTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
             'email': 'newmail@example.com',
             'password': self.user1Data['password']}
 
-        response = self.client.post('/api/users/', payload_new_user_data)
+        response = self.client.post(self.user_list_url, payload_new_user_data)
         data = response.data
 
         self.assertEqual(data['email'], payload_new_user_data['email'])
@@ -56,10 +59,10 @@ class CreateUserTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.post('/api/users/')
+        response = self.client.post(self.user_list_url)
 
         self.assertEqual(400, response.status_code)
 
@@ -70,7 +73,7 @@ class CreateUserTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -78,11 +81,11 @@ class CreateUserTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/users/', payload_new_user_data)
+        response = self.client.post(self.user_list_url, payload_new_user_data)
         self.assertEqual(403, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.post('/api/users/')
+        response = self.client.post(self.user_list_url)
 
         self.assertEqual(403, response.status_code)
