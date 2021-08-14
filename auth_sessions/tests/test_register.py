@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class RegisterTest(TestCase):
@@ -9,6 +10,7 @@ class RegisterTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.register_url = reverse('register')
 
     def test_valid_data(self):
         """" Returns OK(200) sending valid data """
@@ -18,7 +20,7 @@ class RegisterTest(TestCase):
         username = 'new_user'
 
         payload = {'email': email, 'password': password, 'password_confirm': password_confirm, 'username': username}
-        response = self.client.post('/api/auth/register', payload)
+        response = self.client.post(self.register_url, payload)
         data = response.data
 
         self.assertNotIn('errors', data)
@@ -31,7 +33,7 @@ class RegisterTest(TestCase):
 
     def test_no_data(self):
         """" Returns bad request(400) sending  no data """
-        response = self.client.post('/api/auth/register')
+        response = self.client.post(self.register_url)
         data = response.data
 
         self.assertIn('email', data)
@@ -46,7 +48,7 @@ class RegisterTest(TestCase):
     def test_invalid_data(self):
         """" Returns bad request(400) sending invalid email address """
         payload = {'email': "not_valid_email"}
-        response = self.client.post('/api/auth/register', payload)
+        response = self.client.post(self.register_url, payload)
         data = response.data
 
         self.assertIn('email', data)

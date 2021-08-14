@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class UpdateToDoTest(TestCase):
@@ -10,6 +11,7 @@ class UpdateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -46,7 +48,7 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_item = {
@@ -54,7 +56,7 @@ class UpdateToDoTest(TestCase):
             'completed': True
         }
 
-        response = self.client.put('/api/todos/{}/'.format(self.user_1_item.id), payload_item)
+        response = self.client.put(reverse('todo-detail', args=[self.user_1_item.id]), payload_item)
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
@@ -70,7 +72,7 @@ class UpdateToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_item = {
@@ -79,7 +81,7 @@ class UpdateToDoTest(TestCase):
             'completed': True
         }
 
-        response = self.client.put('/api/todos/{}/'.format(self.user_1_item.id), payload_item)
+        response = self.client.put(reverse('todo-detail', args=[self.user_1_item.id]), payload_item)
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
@@ -95,14 +97,14 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.put('/api/todos/{}/'.format(self.user_2_item.id))
+        response = self.client.put(reverse('todo-detail', args=[self.user_2_item.id]))
         self.assertEqual(404, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.put('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.put(reverse('todo-detail', args=[self.user_1_item.id]))
 
         self.assertEqual(403, response.status_code)

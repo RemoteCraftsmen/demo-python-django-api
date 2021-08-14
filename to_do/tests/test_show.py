@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class ShowToDoTest(TestCase):
@@ -10,6 +11,7 @@ class ShowToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -44,10 +46,10 @@ class ShowToDoTest(TestCase):
             'email': self.user1Data['email'],
             'password': self.user1Data['password']
         }
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
 
         self.assertEqual(200, response.status_code)
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.user_1_item.id]))
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
@@ -62,10 +64,10 @@ class ShowToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.user_1_item.id]))
         data = response.data
 
         self.assertEqual(data['id'], str(self.user_1_item.id))
@@ -73,14 +75,14 @@ class ShowToDoTest(TestCase):
         self.assertEqual(data['owner']['id'], str(self.user_1_item.owner.id))
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.user_2_item.id]))
         data = response.data
         self.assertEqual(data['id'], str(self.user_2_item.id))
         self.assertEqual(data['name'], str(self.user_2_item.name))
         self.assertEqual(data['owner']['id'], str(self.user_2_item.owner.id))
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.admin_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.admin_item.id]))
         data = response.data
         self.assertEqual(data['id'], str(self.admin_item.id))
         self.assertEqual(data['name'], str(self.admin_item.name))
@@ -94,14 +96,14 @@ class ShowToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/todos/{}/'.format(self.user_2_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.user_2_item.id]))
         self.assertEqual(404, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.get(reverse('todo-detail', args=[self.user_1_item.id]))
 
         self.assertEqual(403, response.status_code)

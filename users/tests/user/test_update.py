@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class UpdateToDoTest(TestCase):
@@ -10,6 +11,7 @@ class UpdateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
 
         self.user1Data = {
             'username': 'test_user',
@@ -47,7 +49,7 @@ class UpdateToDoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -55,7 +57,7 @@ class UpdateToDoTest(TestCase):
             'username': "new_test_user",
             'password': self.user1Data['password']}
 
-        response = self.client.put('/api/users/{}/'.format(self.user_2.id), payload_new_user_data)
+        response = self.client.put(reverse('user-detail', args=[self.user_2.id]), payload_new_user_data)
         data = response.data
 
         self.assertEqual(str(data['id']), str(self.user_2.id))
@@ -69,7 +71,7 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {
@@ -77,7 +79,7 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.put('/api/users/{}/'.format(self.user_2.id), payload_new_user_data)
+        response = self.client.put(reverse('user-detail', args=[self.user_2.id]), payload_new_user_data)
         self.assertEqual(403, response.status_code)
 
     def test_user_can_not_update_itself(self):
@@ -87,19 +89,19 @@ class UpdateToDoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         payload_new_user_data = {'email': 'newmail@example.com',
                                  'username': "new_test_user",
                                  'password': self.user1Data['password']}
 
-        response = self.client.put('/api/users/{}/'.format(self.user_1.id), payload_new_user_data)
+        response = self.client.put(reverse('user-detail', args=[self.user_1.id]), payload_new_user_data)
 
         self.assertEqual(403, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.put('/api/users/{}/'.format(self.user_1.id))
+        response = self.client.put(reverse('user-detail', args=[self.user_1.id]))
 
         self.assertEqual(403, response.status_code)

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class LoginTest(TestCase):
@@ -9,14 +10,19 @@ class LoginTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+
+
         self.email = 'test_user@example.com'
         self.password = 'testing_password_123'
+
         get_user_model().objects.create_user(self.email, self.password)
 
     def test_valid_data(self):
         """" Returns OK(200) sending valid data """
+
         payload = {'email': self.email, 'password': self.password}
-        response = self.client.post('/api/auth/login', payload)
+        response = self.client.post(self.login_url, payload)
         data = response.data
 
         self.assertNotIn('errors', data)
@@ -25,7 +31,7 @@ class LoginTest(TestCase):
 
     def test_no_data(self):
         """" Returns bad request(400) sending  no data """
-        response = self.client.post('/api/auth/login')
+        response = self.client.post(self.login_url)
         data = response.data
 
         self.assertIn('email', data)
@@ -37,7 +43,7 @@ class LoginTest(TestCase):
     def test_invalid_data(self):
         """" Returns bad request(400) sending invalid email address """
         payload = {'email': "not_valid_email"}
-        response = self.client.post('/api/auth/login', payload)
+        response = self.client.post(self.login_url, payload)
         data = response.data
 
         self.assertIn('email', data)
@@ -49,6 +55,6 @@ class LoginTest(TestCase):
     def test_wrong_data(self):
         """" Returns Unauthorized(401) sending wrong data """
         payload = {'email': self.email, 'password': 'wrong_password'}
-        response = self.client.post('/api/auth/login', payload)
+        response = self.client.post(self.login_url, payload)
 
         self.assertEqual(401, response.status_code)

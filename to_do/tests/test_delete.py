@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from to_do.models.Todo import Todo
+from django.urls import reverse
 
 
 class DeleteTodoTest(TestCase):
@@ -10,6 +11,7 @@ class DeleteTodoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
 
         self.user1Data = {
             'email': 'test_user@example.com',
@@ -42,10 +44,10 @@ class DeleteTodoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.delete('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.user_1_item.id]))
 
         is_deleted_item_exist = Todo.objects.filter(id=self.user_1_item.id).exists()
         self.assertFalse(is_deleted_item_exist)
@@ -59,22 +61,22 @@ class DeleteTodoTest(TestCase):
             'password': self.adminData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         self.user_1_item = Todo.objects.create(name="User1_item1", owner=self.user_1)
 
-        response = self.client.delete('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.user_1_item.id]))
         is_deleted_item_exist = Todo.objects.filter(id=self.user_1_item.id).exists()
         self.assertFalse(is_deleted_item_exist)
         self.assertEqual(204, response.status_code)
 
-        response = self.client.delete('/api/todos/{}/'.format(self.user_2_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.user_2_item.id]))
         is_deleted_item_exist = Todo.objects.filter(id=self.user_2_item.id).exists()
         self.assertFalse(is_deleted_item_exist)
         self.assertEqual(204, response.status_code)
 
-        response = self.client.delete('/api/todos/{}/'.format(self.admin_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.admin_item.id]))
         is_deleted_item_exist = Todo.objects.filter(id=self.user_2_item.id).exists()
         self.assertFalse(is_deleted_item_exist)
         self.assertEqual(204, response.status_code)
@@ -86,16 +88,16 @@ class DeleteTodoTest(TestCase):
             'password': self.user1Data['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
         self.user_2_item = Todo.objects.create(name="User2_item1", owner=self.user_2)
 
-        response = self.client.delete('/api/todos/{}/'.format(self.user_2_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.user_2_item.id]))
         self.assertEqual(404, response.status_code)
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.delete('/api/todos/{}/'.format(self.user_1_item.id))
+        response = self.client.delete(reverse('todo-detail', args=[self.user_1_item.id]))
 
         self.assertEqual(403, response.status_code)

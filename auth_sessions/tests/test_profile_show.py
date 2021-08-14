@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class UpdateToDoTest(TestCase):
@@ -9,6 +10,8 @@ class UpdateToDoTest(TestCase):
     """
     def setUp(self):
         self.client = APIClient()
+        self.login_url = reverse('login')
+        self.show_profile_url = reverse('show_profile')
 
         self.userData = {
             'email': 'test_user@example.com',
@@ -25,10 +28,10 @@ class UpdateToDoTest(TestCase):
             'password': self.userData['password']
         }
 
-        response = self.client.post('/api/auth/login', payload_user)
+        response = self.client.post(self.login_url, payload_user)
         self.assertEqual(200, response.status_code)
 
-        response = self.client.get('/api/auth/profile')
+        response = self.client.get(self.show_profile_url)
         data = response.data
 
         self.assertEqual(data['email'], self.user.email)
@@ -38,6 +41,6 @@ class UpdateToDoTest(TestCase):
 
     def test_not_logged_in(self):
         """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/auth/profile')
+        response = self.client.get(self.show_profile_url)
 
         self.assertEqual(403, response.status_code)
