@@ -9,7 +9,7 @@ faker = Factory.create()
 
 class CreateUserTest(TestCase):
     """
-        POST /api/todos
+        POST /api/users
     """
     def setUp(self):
         self.client = APIClient()

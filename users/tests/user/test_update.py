@@ -7,9 +7,9 @@ from faker import Factory
 faker = Factory.create()
 
 
-class UpdateToDoTest(TestCase):
+class UpdateUsersTest(TestCase):
     """
-        PUT /api/todos/:id
+        PUT /api/users/:id
     """
     def setUp(self):
         self.client = APIClient()

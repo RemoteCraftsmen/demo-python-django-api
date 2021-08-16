@@ -8,7 +8,7 @@ from faker import Factory
 faker = Factory.create()
 
 
-class TestCheckPasswordResetController(TestCase):
+class TestCheckPasswordReset(TestCase):
     """
         POST /api/todos
     """

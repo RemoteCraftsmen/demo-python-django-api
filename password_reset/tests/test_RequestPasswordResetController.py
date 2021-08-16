@@ -6,7 +6,7 @@ from faker import Factory
 faker = Factory.create()
 
 
-class RequestPasswordResetController(TestCase):
+class RequestPasswordReset(TestCase):
     """
         POST /api/todos
     """
