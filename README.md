@@ -24,8 +24,6 @@ cp .env.example .env
 #docker setup
 docker-compose up --build #or install postgres manually
 
-#env
-Create file .env and write your DB configuration 
 ```
 
 ### Migrate Database:

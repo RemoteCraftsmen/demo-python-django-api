@@ -6,9 +6,9 @@ from faker import Factory
 faker = Factory.create()
 
 
-class DeleteToDoTest(TestCase):
+class DeleteUsersTest(TestCase):
     """
-        DELETE /api/todos/:id
+        DELETE /api/users/:id
     """
     def setUp(self):
         self.client = APIClient()
@@ -34,7 +34,7 @@ class DeleteToDoTest(TestCase):
         self.admin.save()
 
     def test_admin_can_delete_users(self):
-        """" Returns No_Content(204) selecting to-do item  as admin """
+        """" Returns No_Content(204) selecting user  as admin """
         self.client.force_login(self.admin)
 
         response = self.client.delete(reverse('user-detail', args=[self.user_2.id]))

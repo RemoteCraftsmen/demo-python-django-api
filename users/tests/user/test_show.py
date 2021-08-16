@@ -6,7 +6,7 @@ from faker import Factory
 faker = Factory.create()
 
 
-class ShowToDoTest(TestCase):
+class ShowUsersTest(TestCase):
     """
         GET /api/users/:id
     """

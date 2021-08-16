@@ -6,7 +6,7 @@ from faker import Factory
 faker = Factory.create()
 
 
-class IndexToDoTest(TestCase):
+class IndexUsersTest(TestCase):
     """
         GET /api/users
     """

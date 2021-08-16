@@ -6,7 +6,7 @@ from faker import Factory
 faker = Factory.create()
 
 
-class UpdateToDoTest(TestCase):
+class ChangeProfileTest(TestCase):
     """
         PUT /api/auth/change-profile
     """
