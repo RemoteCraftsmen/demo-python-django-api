@@ -2,8 +2,10 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
-from faker import Factory
-faker = Factory.create()
+from faker import Faker
+
+faker = Faker()
+
 
 
 class DeleteUsersTest(TestCase):
@@ -13,23 +15,23 @@ class DeleteUsersTest(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.user1Data = {
+        self.user_1_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
 
-        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
-        self.user2Data = {
+        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
+        self.user_2_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
-        self.user_2 = get_user_model().objects.create_user(**self.user2Data)
-        self.adminData = {
+        self.user_2 = get_user_model().objects.create_user(**self.user_2_data)
+        self.admin_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
 
-        self.admin = get_user_model().objects.create_user(**self.adminData)
+        self.admin = get_user_model().objects.create_user(**self.admin_data)
         self.admin.is_staff = True
         self.admin.save()
 

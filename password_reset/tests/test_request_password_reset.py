@@ -3,9 +3,9 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
-from faker import Factory
+from faker import Faker
 
-faker = Factory.create()
+faker = Faker()
 
 
 class RequestPasswordReset(TestCase):
@@ -16,15 +16,15 @@ class RequestPasswordReset(TestCase):
         self.client = APIClient()
         self.password_reset_url = reverse('password_reset')
 
-        self.user1Data = {
+        self.user_1_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
+        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
 
     def test_initial_data(self):
-        user = get_user_model().objects.filter(email=self.user1Data['email']).first()
+        user = get_user_model().objects.filter(email=self.user_1_data['email']).first()
 
         self.assertIsNone(user.passwordResetToken)
         self.assertIsNone(user.passwordResetTokenExpiresAt)
@@ -33,12 +33,12 @@ class RequestPasswordReset(TestCase):
     def test_admin_can_create_users(self):
         """" Returns Created(201) creating user  as admin """
         payload_user = {
-            'email': self.user1Data['email'],
+            'email': self.user_1_data['email'],
         }
 
         response = self.client.post(self.password_reset_url, payload_user)
 
-        user = get_user_model().objects.filter(email=self.user1Data['email']).first()
+        user = get_user_model().objects.filter(email=self.user_1_data['email']).first()
 
         self.assertIsNotNone(user.passwordResetToken)
         self.assertIsNotNone(user.passwordResetTokenExpiresAt)

@@ -3,9 +3,9 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 from rest_framework.test import APIClient
-from faker import Factory
+from faker import Faker
 
-faker = Factory.create()
+faker = Faker()
 
 
 class RegisterTest(TestCase):

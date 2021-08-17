@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from to_do.models import Todo
-from users.serializers.UserSerializer import UserSerializer
+from users.serializers.user_serializer import UserSerializer
 
 
 class TodoSerializer(serializers.ModelSerializer):

@@ -2,11 +2,11 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
-from faker import Factory
+from faker import Faker
 
-from to_do.models.Todo import Todo
+from to_do.models.todo import Todo
 
-faker = Factory.create()
+faker = Faker()
 
 
 class UpdateToDoTest(TestCase):
@@ -16,27 +16,27 @@ class UpdateToDoTest(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.user1Data = {
+        self.user_1_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
+        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
 
         self.user_1_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_1)
-        self.user2Data = {
+        self.user_2_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
-        self.user_2 = get_user_model().objects.create_user(**self.user2Data)
+        self.user_2 = get_user_model().objects.create_user(**self.user_2_data)
 
         self.user_2_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_2)
 
-        self.adminData = {
+        self.admin_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
-        self.admin = get_user_model().objects.create_user(**self.adminData)
+        self.admin = get_user_model().objects.create_user(**self.admin_data)
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name=faker.pystr_format(), owner=self.admin)
