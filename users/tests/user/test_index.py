@@ -15,23 +15,17 @@ class IndexUsersTest(TestCase):
         self.client = APIClient()
         self.user_list_url = reverse('user-list')
 
-        self.user_1_data = {
-            'email': faker.ascii_safe_email(),
-            'password': faker.pystr_format()
-        }
-        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
+        self.user_1 = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(),
+            password=faker.pystr_format())
 
-        self.user_2_data = {
-            'email': faker.ascii_safe_email(),
-            'password': faker.pystr_format()
-        }
-        self.user_2 = get_user_model().objects.create_user(**self.user_2_data)
+        self.user_2 = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(),
+            password=faker.pystr_format())
 
-        self.admin_data = {
-            'email': faker.ascii_safe_email(),
-            'password': faker.pystr_format()
-        }
-        self.admin = get_user_model().objects.create_user(**self.admin_data)
+        self.admin = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(),
+            password=faker.pystr_format())
         self.admin.is_staff = True
         self.admin.save()
 

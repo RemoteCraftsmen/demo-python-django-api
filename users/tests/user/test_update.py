@@ -21,23 +21,19 @@ class UpdateUsersTest(TestCase):
             'password': faker.pystr_format()
         }
         self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
-        self.user_1_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_1)
 
-        self.user_2_data = {
-            'email': faker.ascii_safe_email(),
-            'password': faker.pystr_format()
-        }
-        self.user_2 = get_user_model().objects.create_user(**self.user_2_data)
-        self.user_2_item = Todo.objects.create(name=faker.pystr_format(), owner=self.user_2)
+        self.user_2 = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(),
+            password=faker.pystr_format())
 
-        self.admin_data = {
-            'email': faker.ascii_safe_email(),
-            'password': faker.pystr_format()
-        }
-        self.admin = get_user_model().objects.create_user(**self.admin_data)
+        self.admin = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(),
+            password=faker.pystr_format())
         self.admin.is_staff = True
         self.admin.save()
-        self.admin_item = Todo.objects.create(name=faker.pystr_format(), owner=self.admin)
+        self.admin_item = Todo.objects.create(
+            name=faker.pystr_format(),
+            owner=self.admin)
 
     def test_admin_can_update_all_users(self):
         """" Returns Ok(200) updating user  as admin """
@@ -79,7 +75,9 @@ class UpdateUsersTest(TestCase):
         payload_new_user_data = {'email': faker.ascii_safe_email(),
                                  'password': self.user_1_data['password']}
 
-        response = self.client.put(reverse('user-detail', args=[self.user_1.id]), payload_new_user_data)
+        response = self.client.put(
+            reverse('user-detail', args=[self.user_1.id]),
+            payload_new_user_data)
 
         self.assertEqual(403, response.status_code)
         self.client.logout()
