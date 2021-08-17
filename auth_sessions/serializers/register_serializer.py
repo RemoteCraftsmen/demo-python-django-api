@@ -7,7 +7,10 @@ import django.contrib.auth.password_validation as validators
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True,
-                                   validators=[UniqueValidator(queryset=get_user_model().objects.all())])
+                                   validators=[
+                                       UniqueValidator(
+                                           queryset=get_user_model().objects.all())
+                                   ])
     password = serializers.CharField(min_length=8, required=True)
     password_confirm = serializers.CharField(min_length=8, required=True,)
 
