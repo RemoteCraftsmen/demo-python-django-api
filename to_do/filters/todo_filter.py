@@ -3,8 +3,8 @@ from to_do.models import Todo
 
 
 class TodoFilter(filters.FilterSet):
-    name_like = filters.CharFilter(field_name='name', lookup_expr='contains')
+    name_like = filters.CharFilter(field_name="name", lookup_expr="contains")
 
     class Meta:
         model = Todo
-        fields = ('name', 'completed', 'owner')
+        fields = ("name", "completed", "owner")

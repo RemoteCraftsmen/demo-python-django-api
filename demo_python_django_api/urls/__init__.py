@@ -13,11 +13,11 @@ from .users import router_users
 
 
 urlpatterns = [
-    path('', include(admin_urlpatterns)),
-    path('', include(swagger_urlpatterns)),
-    path('api/', include(router_users.urls)),
-    path('api/', include(router_todos.urls)),
-    path('api/', include(auth_urlpatterns)),
+    path("", include(admin_urlpatterns)),
+    path("", include(swagger_urlpatterns)),
+    path("api/", include(router_users.urls)),
+    path("api/", include(router_todos.urls)),
+    path("api/", include(auth_urlpatterns)),
 ]
 
 handler404 = no_found_error_handle

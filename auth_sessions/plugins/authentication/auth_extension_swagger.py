@@ -2,14 +2,16 @@
 Authentication classes for Swagger/Spectacular
 """
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
-from auth_sessions.plugins.authentication.custom_session \
-    import CsrfExemptSessionAuthentication
+from auth_sessions.plugins.authentication.custom_session import (
+    CsrfExemptSessionAuthentication,
+)
 
 
 class CustomSessionScheme(OpenApiAuthenticationExtension):
     """
     Custom session authentication without CSFR
     """
+
     name = "cookieAuth"
     target_class = CsrfExemptSessionAuthentication
     priority = -1
@@ -19,7 +21,7 @@ class CustomSessionScheme(OpenApiAuthenticationExtension):
         Returns security settings for swagger
         """
         return {
-            'type': 'apiKey',
-            'in': 'cookie',
-            'name': 'sessionid',
+            "type": "apiKey",
+            "in": "cookie",
+            "name": "sessionid",
         }

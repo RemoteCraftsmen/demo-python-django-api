@@ -9,9 +9,18 @@ class ProfileSerializer(serializers.ModelSerializer):
     """
     Responses with Basic user profile data.
     """
+
     class Meta:
         """
         Meta Data - model and fields
         """
+
         model = get_user_model()
-        fields = ('email', 'first_name', 'last_name', 'email', 'last_login', 'date_joined')
+        fields = (
+            "email",
+            "first_name",
+            "last_name",
+            "email",
+            "last_login",
+            "date_joined",
+        )

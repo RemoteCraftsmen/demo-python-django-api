@@ -4,20 +4,28 @@ from django.core import exceptions
 
 
 class ResetPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=8, required=True,)
-    password_confirm = serializers.CharField(min_length=8, required=True,)
+    password = serializers.CharField(
+        min_length=8,
+        required=True,
+    )
+    password_confirm = serializers.CharField(
+        min_length=8,
+        required=True,
+    )
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        if attrs["password"] != attrs["password_confirm"]:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
 
-        user = self.context['user']
+        user = self.context["user"]
         errors = dict()
 
         try:
-            validators.validate_password(password=attrs['password'], user=user)
+            validators.validate_password(password=attrs["password"], user=user)
         except exceptions.ValidationError as error:
-            errors['password'] = list(error.messages)
+            errors["password"] = list(error.messages)
 
         if errors:
             raise serializers.ValidationError(errors)

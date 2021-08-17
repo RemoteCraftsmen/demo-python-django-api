@@ -15,17 +15,16 @@ from split_settings.tools import include
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 include(
-    'mail.py',
-    'database.py',
-    'middleware.py',
-    'apps.py',
-    'rest_framework.py',
-    'spectacular.py',
-    'local.py',
-    'password_validators.py',
-    'templates.py',
-    'allowed_hosts.py',
-    'routing.py',
-    'security.py',
-
+    "mail.py",
+    "database.py",
+    "middleware.py",
+    "apps.py",
+    "rest_framework.py",
+    "spectacular.py",
+    "local.py",
+    "password_validators.py",
+    "templates.py",
+    "allowed_hosts.py",
+    "routing.py",
+    "security.py",
 )

@@ -18,20 +18,24 @@ class Register(generics.CreateAPIView):
     Register new user
     * Requires email, password, username, passwordConfirm  in body section
     """
+
     serializer_class = RegisterSerializer
 
     @extend_schema(
-            responses={
-                200: BasicUserSerializer,
-                401: OpenApiResponse(description='Unauthorized'),
-                400: bad_request
-            }, request=RegisterSerializer, tags=["Auth"])
+        responses={
+            200: BasicUserSerializer,
+            401: OpenApiResponse(description="Unauthorized"),
+            400: bad_request,
+        },
+        request=RegisterSerializer,
+        tags=["Auth"],
+    )
     def post(self, request, **kwargs):
         serializer = self.serializer_class(data=request.data)
 
         serializer.is_valid(raise_exception=True)
 
-        email, password = itemgetter('email', 'password')(serializer.validated_data)
+        email, password = itemgetter("email", "password")(serializer.validated_data)
 
         user = get_user_model().objects.create_user(email, password)
         login(request, user)

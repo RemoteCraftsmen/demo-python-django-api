@@ -18,22 +18,24 @@ class Login(generics.CreateAPIView):
     Log into system
     * Requires email and password in body section
     """
+
     serializer_class = LoginSerializer
 
     @extend_schema(
-                   responses={
-                       200: BasicUserSerializer,
-                       401: OpenApiResponse(description='Unauthorized'),
-                       400: bad_request
-                   },
-                   request=LoginSerializer,
-                   tags=["Auth"])
+        responses={
+            200: BasicUserSerializer,
+            401: OpenApiResponse(description="Unauthorized"),
+            400: bad_request,
+        },
+        request=LoginSerializer,
+        tags=["Auth"],
+    )
     def post(self, request, **kwargs):
         serializer = self.serializer_class(data=request.data)
 
         serializer.is_valid(raise_exception=True)
 
-        email, password = itemgetter('email', 'password')(request.data)
+        email, password = itemgetter("email", "password")(request.data)
         logged_user = get_user_model().objects.filter(email=email).first()
 
         if logged_user is None or not logged_user.check_password(password):
