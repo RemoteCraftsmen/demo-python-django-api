@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from password_reset.swagger.responses.bad_request import bad_request
-from password_reset.serializers.CheckPasswordResetSerializer import CheckPasswordResetSerializer
-from password_reset.services.PasswordResetTokenGeneratorHandler import PasswordResetTokenGeneratorHandler
-from password_reset.services.DateService import DateService
+from password_reset.serializers.check_password_reset_serializer import CheckPasswordResetSerializer
+from password_reset.services.password_reset_token_generator_handler import PasswordResetTokenGeneratorHandler
+from password_reset.services.date_service import DateService
 from mail_templated import send_mail
 
 

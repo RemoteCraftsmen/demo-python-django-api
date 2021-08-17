@@ -2,9 +2,9 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
-from faker import Factory
+from faker import Faker
 
-faker = Factory.create()
+faker = Faker()
 
 
 class IndexUsersTest(TestCase):
@@ -15,23 +15,23 @@ class IndexUsersTest(TestCase):
         self.client = APIClient()
         self.user_list_url = reverse('user-list')
 
-        self.user1Data = {
+        self.user_1_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
-        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
+        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
 
-        self.user2Data = {
+        self.user_2_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
-        self.user_2 = get_user_model().objects.create_user(**self.user2Data)
+        self.user_2 = get_user_model().objects.create_user(**self.user_2_data)
 
-        self.adminData = {
+        self.admin_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.pystr_format()
         }
-        self.admin = get_user_model().objects.create_user(**self.adminData)
+        self.admin = get_user_model().objects.create_user(**self.admin_data)
         self.admin.is_staff = True
         self.admin.save()
 

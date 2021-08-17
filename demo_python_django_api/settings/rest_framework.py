@@ -1,6 +1,6 @@
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'auth_sessions.plugins.authentication.CsrfExemptSessionAuthentication.CsrfExemptSessionAuthentication',
+        'auth_sessions.plugins.authentication.custom_session.CsrfExemptSessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 25,

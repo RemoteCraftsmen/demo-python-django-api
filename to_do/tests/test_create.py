@@ -4,11 +4,11 @@ from django.urls import reverse
 
 from rest_framework.test import APIClient
 
-from faker import Factory
+from faker import Faker
 
-from to_do.models.Todo import Todo
+from to_do.models.todo import Todo
 
-faker = Factory.create()
+faker = Faker()
 
 
 class CreateToDoTest(TestCase):
@@ -19,18 +19,18 @@ class CreateToDoTest(TestCase):
         self.client = APIClient()
         self.todo_list_url = reverse('todo-list')
 
-        self.user1Data = {
+        self.user_1_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
 
-        self.user_1 = get_user_model().objects.create_user(**self.user1Data)
+        self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
 
-        self.adminData = {
+        self.admin_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
-        self.admin = get_user_model().objects.create_user(**self.adminData)
+        self.admin = get_user_model().objects.create_user(**self.admin_data)
         self.admin.is_staff = True
         self.admin.save()
         self.admin_item = Todo.objects.create(name=faker.pystr_format(), owner=self.admin)

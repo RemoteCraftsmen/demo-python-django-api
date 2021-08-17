@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from password_reset.swagger.responses.bad_request import bad_request
-from password_reset.serializers.ResetPasswordSerializer import ResetPasswordSerializer
+from password_reset.serializers.reset_password_serializer import ResetPasswordSerializer
 
 
 class RequestPasswordResetController(generics.CreateAPIView):

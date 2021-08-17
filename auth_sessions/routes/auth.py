@@ -1,10 +1,10 @@
 from django.urls import path
 
-from auth_sessions.controllers.auth.Login import Login
-from auth_sessions.controllers.auth.Logout import Logout
-from auth_sessions.controllers.auth.Register import Register
-from auth_sessions.controllers.auth.ChangePassword import ChangePassword
-from auth_sessions.controllers.auth.ChangeProfile import ChangeProfile
+from auth_sessions.controllers.auth.login import Login
+from auth_sessions.controllers.auth.logout import Logout
+from auth_sessions.controllers.auth.register import Register
+from auth_sessions.controllers.auth.change_password import ChangePassword
+from auth_sessions.controllers.auth.change_profile import ChangeProfile
 
 
 urls = [

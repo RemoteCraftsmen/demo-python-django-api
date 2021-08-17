@@ -1,5 +1,6 @@
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
-from auth_sessions.plugins.authentication.CsrfExemptSessionAuthentication import CsrfExemptSessionAuthentication
+from auth_sessions.plugins.authentication.custom_session \
+    import CsrfExemptSessionAuthentication
 
 
 class CustomSessionScheme(OpenApiAuthenticationExtension):

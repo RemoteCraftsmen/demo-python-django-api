@@ -1,5 +1,5 @@
-from password_reset.controllers.CheckPasswordResetController import CheckPasswordResetController
-from password_reset.controllers.RequestPasswordResetController import RequestPasswordResetController
+from password_reset.controllers.check_password_reset_controller import CheckPasswordResetController
+from password_reset.controllers.request_password_reset_controller import RequestPasswordResetController
 
 from django.urls import path
 

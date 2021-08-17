@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rest_framework.test import APIClient
-from faker import Factory
+from faker import Faker
 
-faker = Factory.create()
+faker = Faker()
 
 
 class ShowProfileTest(TestCase):
@@ -16,12 +16,12 @@ class ShowProfileTest(TestCase):
         self.client = APIClient()
         self.show_profile_url = reverse('show_profile')
 
-        self.userData = {
+        self.user_data = {
             'email': faker.ascii_safe_email(),
             'password': faker.password(length=12)
         }
 
-        self.user = get_user_model().objects.create_user(**self.userData)
+        self.user = get_user_model().objects.create_user(**self.user_data)
 
     def test_user_can_see_its_profile(self):
         """" Returns Ok(200) sending valid data  as user """
