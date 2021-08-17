@@ -1,7 +1,8 @@
-from django.db import models
-from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
-from django.conf import settings
 import uuid
+
+from django.db import models
+from django.conf import settings
+from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
 
 
 class Todo(SafeDeleteModel):

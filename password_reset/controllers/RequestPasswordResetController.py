@@ -1,9 +1,10 @@
+from django.contrib.auth import get_user_model
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-from password_reset.serializers.ResetPasswordSerializer import ResetPasswordSerializer
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 from password_reset.swagger.responses.bad_request import bad_request
+from password_reset.serializers.ResetPasswordSerializer import ResetPasswordSerializer
 
 
 class RequestPasswordResetController(generics.CreateAPIView):

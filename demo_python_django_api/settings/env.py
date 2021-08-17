@@ -1,5 +1,7 @@
-import environ
 import os
+
+import environ
+
 from .base_dir import BASE_DIR
 env = environ.Env()
 

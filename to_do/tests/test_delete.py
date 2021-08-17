@@ -1,9 +1,13 @@
 from django.test import TestCase
-from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from to_do.models.Todo import Todo
 from django.urls import reverse
+
+from rest_framework.test import APIClient
+
 from faker import Factory
+
+from to_do.models.Todo import Todo
+
 faker = Factory.create()
 
 
