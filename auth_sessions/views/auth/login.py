@@ -41,7 +41,6 @@ class Login(generics.CreateAPIView):
         if logged_user is None or not logged_user.check_password(password):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        if logged_user.check_password(password):
-            login(request, logged_user)
+        login(request, logged_user)
 
-            return Response(BasicUserSerializer(logged_user).data)
+        return Response(BasicUserSerializer(logged_user).data)
