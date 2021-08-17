@@ -1,5 +1,6 @@
-from auth_sessions.controllers.profile.Show import Show
 from django.urls import path
+
+from auth_sessions.controllers.profile.Show import Show
 
 
 urls = [

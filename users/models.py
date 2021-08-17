@@ -1,10 +1,12 @@
+from datetime import datetime
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from safedelete.models import SafeDeleteModel, SOFT_DELETE
-import uuid
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime
 from django.utils.timezone import make_aware
+
+from safedelete.models import SafeDeleteModel, SOFT_DELETE
 
 
 class UserManager(BaseUserManager):

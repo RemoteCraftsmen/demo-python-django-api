@@ -1,10 +1,13 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import generics
 from rest_framework.response import Response
-from auth_sessions.serializers import ChangePasswordSerializer
-from django.contrib.auth import get_user_model
-from auth_sessions.swagger.responses.bad_request import bad_request
-from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.permissions import IsAuthenticated
+
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
+from auth_sessions.serializers import ChangePasswordSerializer
+from auth_sessions.swagger.responses.bad_request import bad_request
 
 
 class ChangePassword(generics.CreateAPIView):

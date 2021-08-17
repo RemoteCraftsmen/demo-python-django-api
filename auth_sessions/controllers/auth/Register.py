@@ -1,11 +1,13 @@
+from operator import itemgetter
+
+from django.contrib.auth import login
+from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.response import Response
-from auth_sessions.serializers import RegisterSerializer, BasicUserSerializer
-from django.contrib.auth import login
-from operator import itemgetter
-from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 from auth_sessions.swagger.responses.bad_request import bad_request
+from auth_sessions.serializers import RegisterSerializer, BasicUserSerializer
 
 
 class Register(generics.CreateAPIView):

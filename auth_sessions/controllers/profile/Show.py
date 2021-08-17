@@ -1,10 +1,11 @@
+from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-from auth_sessions.serializers import ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 from auth_sessions.swagger.responses.bad_request import bad_request
+from auth_sessions.serializers import ProfileSerializer
 
 
 class Show(generics.RetrieveAPIView):

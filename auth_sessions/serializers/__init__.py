@@ -1,4 +1,3 @@
-from . import *
 from auth_sessions.serializers.LoginSerializer import LoginSerializer
 from auth_sessions.serializers.RegisterSerializer import RegisterSerializer
 from auth_sessions.serializers.BasicUserSerializer import BasicUserSerializer

@@ -1,8 +1,9 @@
 from django.test import TestCase
-from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from rest_framework.test import APIClient
 from faker import Factory
+
 faker = Factory.create()
 
 
