@@ -1,3 +1,6 @@
+"""
+Forbidden Error example for Spectacular
+"""
 forbidden = {
                 "type": "object",
                 "properties": {"detail": {"type": "string"}},

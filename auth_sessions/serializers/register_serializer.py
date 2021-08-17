@@ -1,3 +1,6 @@
+"""
+Serializer for Register new user.
+"""
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth import get_user_model
@@ -6,6 +9,10 @@ import django.contrib.auth.password_validation as validators
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Validates user data. It should be used as Request serializer.
+    Uses fields: password, password_confirm, email
+    """
     email = serializers.EmailField(required=True,
                                    validators=[
                                        UniqueValidator(
@@ -15,6 +22,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(min_length=8, required=True,)
 
     class Meta:
+        """
+        Meta Data - model and fields
+        """
         model = get_user_model()
         fields = ('password', 'password_confirm', 'email')
 

@@ -1,3 +1,6 @@
+"""
+Logging in view
+"""
 from operator import itemgetter
 
 from rest_framework import status, generics

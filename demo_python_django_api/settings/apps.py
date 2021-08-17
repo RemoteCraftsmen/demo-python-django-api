@@ -1,3 +1,6 @@
+"""
+List of installed apps
+"""
 INSTALLED_APPS = [
     'to_do.apps.TodoConfig',
     'users',

@@ -1,3 +1,6 @@
+"""
+Routes for auth session. It loads rotes file automatically
+"""
 import importlib
 import os
 

@@ -1,3 +1,6 @@
+"""
+Routes for user profile
+"""
 from django.urls import path
 
 from auth_sessions.controllers.profile.show import Show

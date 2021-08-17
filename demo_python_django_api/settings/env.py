@@ -1,3 +1,6 @@
+"""
+Settings for env file
+"""
 import os
 
 import environ

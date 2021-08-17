@@ -1,3 +1,7 @@
+"""
+Routes for auth endpoints
+"""
+
 from django.urls import path
 from django.conf.urls import include
 

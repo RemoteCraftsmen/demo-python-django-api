@@ -1,10 +1,12 @@
+"""
+Permission to only allow owners and admins to view and edit it.
+"""
 from rest_framework import permissions
 
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """
-    Permission to only allow owners and admins to view and edit it.
+    Allows only admin and owner to view and edit
     """
-
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user or request.user.is_staff

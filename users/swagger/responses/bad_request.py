@@ -1,3 +1,6 @@
+"""
+Bad Request Error example for Spectacular
+"""
 bad_request = {
                 "type": "object",
                 "properties": {"detail": {"type": "string"}},

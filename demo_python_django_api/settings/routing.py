@@ -1,3 +1,7 @@
+"""
+Routing settings
+"""
+
 from .env import env
 
 ROOT_URLCONF = 'demo_python_django_api.urls'

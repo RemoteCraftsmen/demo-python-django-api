@@ -1,3 +1,6 @@
+"""
+Change Password View
+"""
 from django.contrib.auth import get_user_model
 
 from rest_framework import generics
@@ -27,6 +30,9 @@ class ChangePassword(generics.CreateAPIView):
                    request=ChangePasswordSerializer,
                    tags=["Auth"])
     def put(self, request, **kwargs):
+        """
+        Updating user data by put method
+        """
         user = get_user_model().objects.get(id=request.user.id)
         serializer = self.serializer_class(instance=user,
                                            data=request.data,
