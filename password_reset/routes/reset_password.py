@@ -1,7 +1,7 @@
-from password_reset.controllers.check_password_reset_controller import (
+from password_reset.views.check_password_reset_controller import (
     CheckPasswordResetController,
 )
-from password_reset.controllers.request_password_reset_controller import (
+from password_reset.views.request_password_reset_controller import (
     RequestPasswordResetController,
 )
 
