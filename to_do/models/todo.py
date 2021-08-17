@@ -1,3 +1,6 @@
+"""
+To_do item model
+"""
 import uuid
 
 from django.db import models
@@ -6,6 +9,9 @@ from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
 
 
 class Todo(SafeDeleteModel):
+    """
+    To_do item model
+    """
     _safedelete_policy = SOFT_DELETE_CASCADE
 
     id = models.UUIDField(primary_key=True,

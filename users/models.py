@@ -1,3 +1,6 @@
+"""
+Custom User Model with UUID and mail as username
+"""
 from datetime import datetime
 import uuid
 
@@ -44,6 +47,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser, SafeDeleteModel):
+    """
+    Custom User model with UUID as ID, email as username, soft delete, and password reset fields
+    """
     _safedelete_policy = SOFT_DELETE
 
     username = None
@@ -56,6 +62,9 @@ class User(AbstractUser, SafeDeleteModel):
     REQUIRED_FIELDS = []
 
     def is_password_reset_token_expired(self):
+        """
+        Checks if password reset token expired
+        """
         return (self.passwordResetTokenExpiresAt is None) \
                or \
                (make_aware(datetime.now()) > self.passwordResetTokenExpiresAt)
@@ -64,6 +73,10 @@ class User(AbstractUser, SafeDeleteModel):
         return self.email
 
     class Meta:
+        """
+        Meta data for user model
+        https://docs.djangoproject.com/en/3.2/ref/models/options/
+        """
         db_table = 'auth_user'
 
     objects = UserManager()

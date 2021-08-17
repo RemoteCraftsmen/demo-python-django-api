@@ -1,3 +1,6 @@
+"""
+To_do Serializer
+"""
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -6,10 +9,16 @@ from users.serializers.user_serializer import UserSerializer
 
 
 class TodoSerializer(serializers.ModelSerializer):
+    """
+    Standart request/response serializer for to_do model
+    """
     owner = UserSerializer(many=False, read_only=True)
     owner_id = serializers.UUIDField(write_only=True, required=False)
 
     class Meta:
+        """
+        Meta Data - model and fields
+        """
         model = Todo
         fields = ('url', 'id', 'name', 'completed', 'owner', 'owner_id')
 

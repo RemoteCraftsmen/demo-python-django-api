@@ -1,3 +1,6 @@
+"""
+View Set for user model
+"""
 from rest_framework import viewsets, permissions
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view
@@ -15,6 +18,9 @@ from users.serializers.user_serializer import UserSerializer
     destroy=UsersSchema.destroy,
     update=UsersSchema.update)
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    User View Set - provides get,post and delete methods for user model
+    """
     queryset = get_user_model().objects.filter(deleted__isnull=True)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]

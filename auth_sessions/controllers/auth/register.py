@@ -1,3 +1,6 @@
+"""
+Register View
+"""
 from operator import itemgetter
 
 from django.contrib.auth import login

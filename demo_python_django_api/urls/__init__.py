@@ -1,3 +1,6 @@
+"""
+Settings for all routes in system
+"""
 from django.urls import path
 from django.conf.urls import include
 from auth_sessions.plugins.error_handlers import no_found_error_handle

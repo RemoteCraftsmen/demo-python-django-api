@@ -1,3 +1,6 @@
+"""
+Routes for auth_session
+"""
 from django.urls import path
 
 from auth_sessions.controllers.auth.login import Login

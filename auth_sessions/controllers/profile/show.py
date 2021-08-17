@@ -1,3 +1,6 @@
+"""
+Profile view
+"""
 from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.response import Response
@@ -22,6 +25,9 @@ class Show(generics.RetrieveAPIView):
                 400: bad_request
             }, request=ProfileSerializer, tags=["Auth"])
     def get(self, request, *args, **kwargs):
+        """
+        Shows logged user data (profile)
+        """
         logged_user_id = self.request.user.id
         user = get_user_model().objects.get(id=logged_user_id)
         serializer = self.serializer_class(user)

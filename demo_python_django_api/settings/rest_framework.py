@@ -1,3 +1,7 @@
+"""
+Rest Framework settings
+"""
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'auth_sessions.plugins.authentication.custom_session.CsrfExemptSessionAuthentication',

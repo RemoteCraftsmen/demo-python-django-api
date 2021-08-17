@@ -1,3 +1,6 @@
+"""
+Test for requesting password reset token
+"""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -13,6 +16,9 @@ class RequestPasswordReset(TestCase):
         POST /api/todos
     """
     def setUp(self):
+        """
+        Setting tests up and providing initial data
+        """
         self.client = APIClient()
         self.password_reset_url = reverse('password_reset')
 
@@ -24,6 +30,11 @@ class RequestPasswordReset(TestCase):
         self.user_1 = get_user_model().objects.create_user(**self.user_1_data)
 
     def test_initial_data(self):
+        """
+        Tests initial data.
+        Fields for resetting password should be empty
+        Token Expired should be true
+        """
         user = get_user_model().objects.filter(email=self.user_1_data['email']).first()
 
         self.assertIsNone(user.passwordResetToken)

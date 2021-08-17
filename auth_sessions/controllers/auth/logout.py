@@ -1,3 +1,6 @@
+"""
+Logout View
+"""
 from django.contrib.auth import logout
 
 from rest_framework import status
@@ -17,5 +20,8 @@ class Logout(APIView):
         }, tags=["Auth"]
     )
     def post(self, request, **kwargs):
+        """
+        Logging user out
+        """
         logout(request)
         return Response(status=status.HTTP_401_UNAUTHORIZED)

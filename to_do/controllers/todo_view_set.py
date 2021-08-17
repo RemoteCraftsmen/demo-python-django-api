@@ -1,3 +1,6 @@
+"""
+Viewset for To_do model
+"""
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,6 +21,9 @@ from auth_sessions.permissions.is_owner_or_admin import IsOwnerOrAdmin
     update=TodoSchema.update
 )
 class TodoViewSet(viewsets.ModelViewSet):
+    """
+    To Do View Set - provides get,post and delete methods for to do model
+    """
     permission_classes = [IsOwnerOrAdmin, IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer

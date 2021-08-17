@@ -1,3 +1,6 @@
+"""
+Security settings
+"""
 from distutils.util import strtobool
 from .env import env
 

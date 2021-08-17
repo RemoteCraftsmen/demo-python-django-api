@@ -1,9 +1,16 @@
+"""
+Change Password Serializer
+"""
+
 from rest_framework import serializers
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
 
 
 class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Request serializer for change password.
+    """
     password = serializers.CharField(min_length=8, required=True,)
     password_confirm = serializers.CharField(min_length=8, required=True,)
     old_password = serializers.CharField(min_length=8, required=True,)

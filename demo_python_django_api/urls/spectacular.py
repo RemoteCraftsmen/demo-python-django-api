@@ -1,3 +1,9 @@
+"""
+Routes for spectacular documentation includes:
+- Swagger,
+- Reddoc,
+- Swagger schema for download
+"""
 from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 

@@ -1,3 +1,6 @@
+"""
+Settings for connection with mail server
+"""
 from distutils.util import strtobool
 from .env import env
 
