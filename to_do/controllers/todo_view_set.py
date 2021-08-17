@@ -18,16 +18,17 @@ from auth_sessions.permissions.is_owner_or_admin import IsOwnerOrAdmin
     retrieve=TodoSchema.retrieve,
     create=TodoSchema.create,
     destroy=TodoSchema.destroy,
-    update=TodoSchema.update
+    update=TodoSchema.update,
 )
 class TodoViewSet(viewsets.ModelViewSet):
     """
     To Do View Set - provides get,post and delete methods for to do model
     """
+
     permission_classes = [IsOwnerOrAdmin, IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
-    http_method_names = ['get', 'post', 'head', 'put', 'delete']
+    http_method_names = ["get", "post", "head", "put", "delete"]
     filterset_class = TodoFilter
 
     def get_queryset(self):
@@ -36,12 +37,17 @@ class TodoViewSet(viewsets.ModelViewSet):
         return Todo.objects.filter(owner=self.request.user.id)
 
     def create(self, request, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={
-            'request': request,
-        })
+        serializer = self.serializer_class(
+            data=request.data,
+            context={
+                "request": request,
+            },
+        )
 
         if not serializer.is_valid():
-            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         serializer.save()
 

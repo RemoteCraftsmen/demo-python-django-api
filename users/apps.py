@@ -8,5 +8,6 @@ class UsersConfig(AppConfig):
     """
     Configuration of to_do App
     """
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users'
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "users"

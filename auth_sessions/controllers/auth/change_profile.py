@@ -17,24 +17,26 @@ class ChangeProfile(generics.UpdateAPIView):
     Change user data for logged user
     * Requires passwordConfirm  in body section
     """
+
     serializer_class = ChangeProfileSerializer
-    http_method_names = ['put']
+    http_method_names = ["put"]
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-                   responses={
-                       200: ChangeProfileSerializer,
-                       401: OpenApiResponse(description='Unauthorized'),
-                       400: bad_request
-                   },
-                   request=ChangeProfileSerializer,
-                   tags=["Auth"])
+        responses={
+            200: ChangeProfileSerializer,
+            401: OpenApiResponse(description="Unauthorized"),
+            400: bad_request,
+        },
+        request=ChangeProfileSerializer,
+        tags=["Auth"],
+    )
     def put(self, request, **kwargs):
         user = get_user_model().objects.get(id=request.user.id)
 
-        serializer = self.serializer_class(instance=user,
-                                           data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(
+            instance=user, data=request.data, context={"request": request}
+        )
 
         serializer.is_valid(raise_exception=True)
         serializer.save()

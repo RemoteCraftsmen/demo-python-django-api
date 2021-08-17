@@ -15,15 +15,19 @@ class Show(generics.RetrieveAPIView):
     """
     Shows logged user data(profile).
     """
+
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-            responses={
-                200: ProfileSerializer,
-                401: OpenApiResponse(description='Unauthorized'),
-                400: bad_request
-            }, request=ProfileSerializer, tags=["Auth"])
+        responses={
+            200: ProfileSerializer,
+            401: OpenApiResponse(description="Unauthorized"),
+            400: bad_request,
+        },
+        request=ProfileSerializer,
+        tags=["Auth"],
+    )
     def get(self, request, *args, **kwargs):
         """
         Shows logged user data (profile)

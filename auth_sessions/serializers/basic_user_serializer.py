@@ -9,9 +9,11 @@ class BasicUserSerializer(serializers.ModelSerializer):
     """
     Returns basic user data
     """
+
     class Meta:
         """
         Meta Data - model and fields
         """
+
         model = get_user_model()
-        fields = ('email', 'first_name', "last_name")
+        fields = ("email", "first_name", "last_name")

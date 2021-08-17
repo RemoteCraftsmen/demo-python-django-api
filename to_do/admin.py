@@ -12,7 +12,13 @@ class SafeDeleteAdminView(SafeDeleteAdmin):
     """
     Settings for models that inherent from Safe Delete model
     """
-    list_display = (highlight_deleted, "name", "completed", "owner") + SafeDeleteAdmin.list_display
+
+    list_display = (
+        highlight_deleted,
+        "name",
+        "completed",
+        "owner",
+    ) + SafeDeleteAdmin.list_display
     list_filter = ("completed",) + SafeDeleteAdmin.list_filter
 
 

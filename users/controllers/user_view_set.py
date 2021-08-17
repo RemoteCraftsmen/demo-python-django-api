@@ -16,13 +16,15 @@ from users.serializers.user_serializer import UserSerializer
     retrieve=UsersSchema.retrieve,
     create=UsersSchema.create,
     destroy=UsersSchema.destroy,
-    update=UsersSchema.update)
+    update=UsersSchema.update,
+)
 class UserViewSet(viewsets.ModelViewSet):
     """
     User View Set - provides get,post and delete methods for user model
     """
+
     queryset = get_user_model().objects.filter(deleted__isnull=True)
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
-    http_method_names = ['get', 'post', 'head', 'put', 'delete']
+    http_method_names = ["get", "post", "head", "put", "delete"]
     filterset_class = UserFilter
