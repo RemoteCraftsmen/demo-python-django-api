@@ -1,121 +1,131 @@
+"""
+Tests for listing to_do items
+"""
 from django.test import TestCase
-from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from to_do.models.Todo import Todo
+from django.urls import reverse
+from rest_framework.test import APIClient
+from faker import Faker
+
+from to_do.models.todo import Todo
+
+faker = Faker()
 
 
 class IndexToDoTest(TestCase):
     """
-        GET /api/todos
+    GET /api/todos
     """
+
     def setUp(self):
         self.client = APIClient()
+        self.todo_list_url = reverse("todo-list")
 
-        self.user1Data = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
-        }
-
-        self.user_1 = get_user_model().objects.create_user(self.user1Data['email'], self.user1Data['password'])
+        self.user_1 = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(), password=faker.password(length=12)
+        )
 
         self.user_1_items = [
-            Todo.objects.create(name="User1_item1", owner=self.user_1),
-            Todo.objects.create(name="User1_item2", owner=self.user_1),
-            Todo.objects.create(name="User1_item3", owner=self.user_1)
+            Todo.objects.create(name=faker.pystr_format(), owner=self.user_1),
+            Todo.objects.create(name=faker.pystr_format(), owner=self.user_1),
+            Todo.objects.create(name=faker.pystr_format(), owner=self.user_1),
         ]
 
-        self.user2Data = {
-            'email': 'test_user2@example.com',
-            'password': 'testing_password_123'
-        }
-
-        self.user_2 = get_user_model().objects.create_user(self.user2Data['email'], self.user2Data['password'])
+        user_2 = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(), password=faker.password(length=12)
+        )
 
         self.user_2_items = [
-            Todo.objects.create(name="User2_item1", owner=self.user_2),
-            Todo.objects.create(name="User2_item2", owner=self.user_2)
+            Todo.objects.create(name=faker.pystr_format(), owner=user_2),
+            Todo.objects.create(name=faker.pystr_format(), owner=user_2),
         ]
 
-        self.adminData = {
-            'email': 'admin@example.com',
-            'password': 'testing_password_123'
-        }
-
-        self.admin = get_user_model().objects.create_user(self.adminData['email'], self.adminData['password'])
+        self.admin = get_user_model().objects.create_user(
+            email=faker.ascii_safe_email(), password=faker.password(length=12)
+        )
         self.admin.is_staff = True
         self.admin.save()
 
         self.admin_items = [
-            Todo.objects.create(name="admin_item1", owner=self.admin),
-            Todo.objects.create(name="admin_item2", owner=self.admin)
+            Todo.objects.create(name=faker.pystr_format(), owner=self.admin),
+            Todo.objects.create(name=faker.pystr_format(), owner=self.admin),
         ]
 
     def test_user1_can_see_only_his_items(self):
-        """" Returns Ok(200) as user """
-        payload_user = {
-            'email': self.user1Data['email'],
-            'password': self.user1Data['password']
-        }
-        response = self.client.post('/api/auth/login', payload_user)
+        """ " Returns Ok(200) as user"""
+        self.client.force_login(self.user_1)
 
-        self.assertEqual(200, response.status_code)
-
-        response = self.client.get('/api/todos/')
+        response = self.client.get(self.todo_list_url)
         data = response.data
-        self.assertIn('next', data)
-        self.assertIn('previous', data)
+        self.assertIn("next", data)
+        self.assertIn("previous", data)
 
-        count = data['count']
+        count = data["count"]
         self.assertEqual(len(self.user_1_items), count)
 
-        results = data['results']
+        results = data["results"]
         self.assertEqual(len(self.user_1_items), len(results))
 
         for todo_item in self.user_1_items:
-            self.assertTrue(any(item['id'] == str(todo_item.id) for item in results))
-            self.assertTrue(any(item['name'] == str(todo_item.name) for item in results))
-            self.assertTrue(all(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
+            self.assertTrue(any(item["id"] == str(todo_item.id) for item in results))
+            self.assertTrue(
+                any(item["name"] == str(todo_item.name) for item in results)
+            )
+            self.assertTrue(
+                all(
+                    str(item["owner"]["id"]) == str(todo_item.owner.id)
+                    for item in results
+                )
+            )
 
         for todo_item in self.user_2_items:
-            self.assertFalse(any(item['id'] == str(todo_item.id) for item in results))
-            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
+            self.assertFalse(any(item["id"] == str(todo_item.id) for item in results))
+            self.assertFalse(
+                any(
+                    str(item["owner"]["id"]) == str(todo_item.owner.id)
+                    for item in results
+                )
+            )
 
         for todo_item in self.admin_items:
-            self.assertFalse(any(item['id'] == str(todo_item.id) for item in results))
-            self.assertFalse(any(str(item['owner']['id']) == str(todo_item.owner.id) for item in results))
+            self.assertFalse(any(item["id"] == str(todo_item.id) for item in results))
+            self.assertFalse(
+                any(
+                    str(item["owner"]["id"]) == str(todo_item.owner.id)
+                    for item in results
+                )
+            )
 
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_admin_can_see_only_all_items(self):
-        """" Returns Ok(200) as admin """
-        payload_admin = {
-            'email': self.adminData['email'],
-            'password': self.adminData['password']
-        }
-        response = self.client.post('/api/auth/login', payload_admin)
+        """ " Returns Ok(200) as admin"""
+        self.client.force_login(self.admin)
 
-        self.assertEqual(200, response.status_code)
-
-        response = self.client.get('/api/todos/')
+        response = self.client.get(self.todo_list_url)
         data = response.data
-        self.assertIn('next', data)
-        self.assertIn('previous', data)
+        self.assertIn("next", data)
+        self.assertIn("previous", data)
 
-        results = data['results']
+        results = data["results"]
         all_items = self.user_1_items + self.user_2_items + self.admin_items
-        count = data['count']
+        count = data["count"]
         self.assertEqual(len(all_items), count)
 
         self.assertEqual(len(all_items), len(results))
 
         for todo_item in all_items:
-            self.assertTrue(any(item['id'] == str(todo_item.id) for item in results))
-            self.assertTrue(any(item['name'] == str(todo_item.name) for item in results))
+            self.assertTrue(any(item["id"] == str(todo_item.id) for item in results))
+            self.assertTrue(
+                any(item["name"] == str(todo_item.name) for item in results)
+            )
 
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_not_logged_in(self):
-        """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/todos/')
+        """ " Returns Forbidden(403) as not logged in"""
+        response = self.client.get(self.todo_list_url)
 
         self.assertEqual(403, response.status_code)

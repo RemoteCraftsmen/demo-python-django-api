@@ -18,7 +18,7 @@ services:
 
     mailcatcher:
         image: schickling/mailcatcher
-        container_name: mailcatcher.nodejs-express-api.docker
+        container_name: mailcatcher.djangoToDo.docker
         restart: unless-stopped
         ports:
             - 127.0.0.1:${EMAIL_PORT}:1025

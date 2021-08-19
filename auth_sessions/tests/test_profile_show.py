@@ -1,43 +1,47 @@
+"""
+Tests for showing profile of logged user
+"""
 from django.test import TestCase
-from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+
+from rest_framework.test import APIClient
+from faker import Faker
+
+faker = Faker()
 
 
-class UpdateToDoTest(TestCase):
+class ShowProfileTest(TestCase):
     """
-        GET /api/auth/profile
+    GET /api/auth/profile
     """
+
     def setUp(self):
         self.client = APIClient()
+        self.show_profile_url = reverse("show_profile")
 
-        self.userData = {
-            'email': 'test_user@example.com',
-            'password': 'testing_password_123'
+        self.user_data = {
+            "email": faker.ascii_safe_email(),
+            "password": faker.password(length=12),
         }
 
-        self.user = get_user_model().objects.create_user(self.userData['email'],
-                                                         self.userData['password'])
+        self.user = get_user_model().objects.create_user(**self.user_data)
 
     def test_user_can_see_its_profile(self):
-        """" Returns Ok(200) sending valid data  as user """
-        payload_user = {
-            'email': self.userData['email'],
-            'password': self.userData['password']
-        }
+        """ " Returns Ok(200) sending valid data  as user"""
+        self.client.force_login(self.user)
 
-        response = self.client.post('/api/auth/login', payload_user)
-        self.assertEqual(200, response.status_code)
-
-        response = self.client.get('/api/auth/profile')
+        response = self.client.get(self.show_profile_url)
         data = response.data
 
-        self.assertEqual(data['email'], self.user.email)
-        self.assertEqual(data['last_name'], self.user.last_name)
-        self.assertEqual(data['first_name'], self.user.first_name)
+        self.assertEqual(data["email"], self.user.email)
+        self.assertEqual(data["last_name"], self.user.last_name)
+        self.assertEqual(data["first_name"], self.user.first_name)
         self.assertEqual(200, response.status_code)
+        self.client.logout()
 
     def test_not_logged_in(self):
-        """" Returns Forbidden(403) as not logged in """
-        response = self.client.get('/api/auth/profile')
+        """ " Returns Forbidden(403) as not logged in"""
+        response = self.client.get(self.show_profile_url)
 
         self.assertEqual(403, response.status_code)
